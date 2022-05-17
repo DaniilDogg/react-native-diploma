@@ -1,0 +1,76 @@
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  Alert,
+  Image,
+  Button,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { storage } from "../../firebase/firebase-config";
+import {
+  ref as reference,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
+export const UploadScreen = () => {
+  const blankAvatar = "./../../assets/images/blank-profile-picture.jpg";
+  const [imageURI, setImageURI] = useState("");
+  const pickImage = async () => {
+    if (Platform.OS !== "web") {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+        return;
+      }
+    }
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      setImageURI(result.uri);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (imageURI === "") {
+      return;
+    }
+    const ref = reference(storage, "avatars/image.jpg"); //how the image will be addressed inside the storage
+
+    /*
+    const img =
+      imageURI === ""
+        ? await getDownloadURL(
+            reference(storage, "avatars/blank-profile-picture.jpg")
+          )
+        : await fetch(imageURI);
+    */
+    const img = await fetch(imageURI);
+    //convert image to array of bytes
+    const bytes = await img.blob();
+    await uploadBytes(ref, bytes); //upload images
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Image
+        source={imageURI === "" ? require(blankAvatar) : { uri: imageURI }}
+        style={{ width: 300, height: 300 }}
+      />
+      <Button title="Upload image" onPress={uploadImage} />
+    </View>
+  );
+};
