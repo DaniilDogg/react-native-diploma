@@ -22,12 +22,12 @@ export const CreateAccountScreen = ({ navigation }) => {
   const blankAvatar = "./../../assets/images/blank-profile-picture.jpg";
   const [isLoading, setIsLoading] = useState(false);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(auth?.currentUser?.displayName);
   const [nameStyle, setNameStyle] = useState({});
   const [nameErrorMessage, setNameErrorMessage] = useState("");
 
   const [location, setLocation] = useState("");
-  const [imageURI, setImageURI] = useState("");
+  const [imageURI, setImageURI] = useState(auth?.currentUser?.photoURL);
 
   const pickImage = async () => {
     if (Platform.OS !== "web") {
@@ -56,7 +56,8 @@ export const CreateAccountScreen = ({ navigation }) => {
       setNameErrorMessage("Enter your name.");
       setNameStyle(authStyle.errorContainer);
       return
-    }    
+    }
+    setIsLoading(true);
     const user = auth.currentUser;
     let photoUrl = user.photoURL;
     if (imageURI != "") {
@@ -82,91 +83,94 @@ export const CreateAccountScreen = ({ navigation }) => {
       photoURL: photoUrl,
       location: location,
     });
-    navigation.replace("HomeScreen");
+    setIsLoading(false);
+    navigation.replace("DrowerScreen");
   };
 
   return (
-    <ScrollView style={{backgroundColor: '#fff'}}>
-      <SafeAreaView style={authStyle.main_container}>
-        <View style={authStyle.view}>
-          <Text h3 style={authStyle.pageTitle}>
-            Create account
-          </Text>
+    <View style={{height: '100%'}}>
+      <ScrollView style={{backgroundColor: '#fff'}}>
+        <View style={authStyle.main_container}>
+          <View style={authStyle.view}>
+            <Text h3 style={authStyle.pageTitle}>
+              Create account
+            </Text>
 
-          <Avatar
-            activeOpalocation={0.2}
-            avatarStyle={{}}
-            containerStyle={[styles.avatar]}
-            icon={{}}
-            iconStyle={{}}
-            imageProps={{}}
-            onPress={pickImage}
-            overlayContainerStyle={{}}
-            placeholderStyle={{}}
-            rounded
-            size="xlarge"
-            source={imageURI === "" ? require(blankAvatar) : { uri: imageURI }}
-          >
-            <View style={[styles.icon]}>
-              <Icon
-                color="#8BCD50"
-                size={40}
-                name="autorenew"
-                type="material-community"
-              />
-            </View>
-          </Avatar>
+            <Avatar
+              activeOpalocation={0.2}
+              avatarStyle={{}}
+              containerStyle={[styles.avatar]}
+              icon={{}}
+              iconStyle={{}}
+              imageProps={{}}
+              onPress={pickImage}
+              overlayContainerStyle={{}}
+              placeholderStyle={{}}
+              rounded
+              size="xlarge"
+              source={imageURI == null ? require(blankAvatar) : { uri: imageURI }}
+            >
+              <View style={[styles.icon]}>
+                <Icon
+                  color="#8BCD50"
+                  size={40}
+                  name="autorenew"
+                  type="material-community"
+                />
+              </View>
+            </Avatar>
 
-          <Input
-            containerStyle={[authStyle.input, nameStyle]}
-            labelStyle={[authStyle.lable]}
-            placeholder="Your name"
-            label="Name*"
-            leftIcon={{ type: "ionicon", name: "person-outline" }}
-            value={name}
-            onChangeText={(text) => {
-              setName(text)
-            }}
-            onEndEditing={()=>{
-              setNameErrorMessage("");
-              setNameStyle({});
-            }}
-            renderErrorMessage
-            errorStyle={authStyle.errorText}
-            errorMessage={nameErrorMessage}
-          />
-          <Input
-            containerStyle={[authStyle.input]}
-            labelStyle={[authStyle.lable]}
-            placeholder="Your location"
-            label="Location"
-            leftIcon={{ type: "material-community", name: "home-city-outline" }}
-            value={location}
-            onChangeText={(text) => setLocation(text)}
-          />
-          {isLoading ?
-          <Button
+            <Input
+              containerStyle={[authStyle.input, nameStyle]}
+              labelStyle={[authStyle.lable]}
+              placeholder="Your name"
+              label="Name*"
+              leftIcon={{ type: "ionicon", name: "person-outline" }}
+              value={name}
+              onChangeText={(text) => {
+                setName(text)
+              }}
+              onEndEditing={()=>{
+                setNameErrorMessage("");
+                setNameStyle({});
+              }}
+              renderErrorMessage
+              errorStyle={authStyle.errorText}
+              errorMessage={nameErrorMessage}
+            />
+            <Input
+              containerStyle={[authStyle.input], {display: 'none'}}
+              labelStyle={[authStyle.lable]}
+              placeholder="Your location"
+              label="Location"
+              leftIcon={{ type: "material-community", name: "home-city-outline" }}
+              value={location}
+              onChangeText={(text) => setLocation(text)}
+            />
+            {isLoading ?
+            <Button
+              title="Create account"
+              buttonStyle={[authStyle.button]}
+              titleStyle={[authStyle.buttonTitle]}
+              onPress={createAccount}
+              loading
+              loadingStyle={[authStyle.button]}
+              loadingProps={{ animating: true }}
+              disabled
+              disabledStyle={[authStyle.button]}
+            />
+            :
+            <Button
             title="Create account"
             buttonStyle={[authStyle.button]}
             titleStyle={[authStyle.buttonTitle]}
             onPress={createAccount}
-            loading
-            loadingStyle={[authStyle.button]}
-            loadingProps={{ animating: true }}
-            disabled
-            disabledStyle={[authStyle.button]}
-          />
-          :
-          <Button
-          title="Create account"
-          buttonStyle={[authStyle.button]}
-          titleStyle={[authStyle.buttonTitle]}
-          onPress={createAccount}
-          />
-          }
+            />
+            }
+          </View>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

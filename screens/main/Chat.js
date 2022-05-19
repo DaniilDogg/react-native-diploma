@@ -27,7 +27,8 @@ import {
   query,
 } from "firebase/firestore";
 
-export const HomeScreen = () => {
+export const ChatScreen = (props) => {
+  props?.navigation?.closeDrawer();
   const massageContainerColor = '#A2A7B9'
   const maxWidth = Dimensions.get('window').width * 0.75
   const [messages, setMessages] = useState([]);
@@ -154,6 +155,7 @@ export const HomeScreen = () => {
     const checkUser = props.currentMessage.user._id != props.user._id
     const checkMassage = props?.previousMessage?.user?._id != props.currentMessage.user._id
     const checkNextMassage = props.currentMessage.user?._id == props?.nextMessage?.user?._id
+    
     const UserName = (props) => {
       const name = props.currentMessage.user.name
       const id = props.currentMessage.user._id
@@ -280,27 +282,30 @@ export const HomeScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <GiftedChat
-        messages={messages}
-        showAvatarForEveryMessage={false}
-        onSend={(messages) => onSend(messages)}
-        renderInputToolbar={(props) => CustomInputToolbar(props)}
-        renderUsernameOnMessage={true}
-        renderAvatarOnTop={true}
-        user={{
-          _id: auth?.currentUser?.uid,
-          name: auth?.currentUser?.displayName,
-          avatar: auth?.currentUser?.photoURL,
-        }}
-        textInputStyle={styles.inputStyle}
-        renderMessage={CustomMessage}
-        renderMessageText={CustomMessageText}
-        renderBubble={CustomBubble}
-        renderTime={CustomTime}
-        renderComposer={CustomComposer}
-      />
-    </SafeAreaView>
+    <GiftedChat
+      messages={messages}
+      showAvatarForEveryMessage={false}
+      onSend={(messages) => onSend(messages)}
+      renderInputToolbar={(props) => CustomInputToolbar(props)}
+      renderUsernameOnMessage={true}
+      renderAvatarOnTop={true}
+      user={{
+        _id: auth?.currentUser?.uid,
+        name: auth?.currentUser?.displayName,
+        avatar: auth?.currentUser?.photoURL,
+      }}
+      listViewProps={{
+        style: {
+          backgroundColor: '#EBE0D4',
+        },
+      }}
+      textInputStyle={styles.inputStyle}
+      renderMessage={CustomMessage}
+      renderMessageText={CustomMessageText}
+      renderBubble={CustomBubble}
+      renderTime={CustomTime}
+      renderComposer={CustomComposer}
+    />
   );
 };
 

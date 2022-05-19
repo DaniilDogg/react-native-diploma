@@ -39,14 +39,14 @@ export const SignInScreen = ({ navigation }) => {
       return
     }
     setIsLoading(true);    
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email.toLowerCase(), password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         if (user.displayName === null) {
           navigation.navigate("Create Account");
         } else {
-          navigation.replace("HomeScreen");
+          navigation.replace("DrowerScreen");
         }
       })
       .catch((error) => {

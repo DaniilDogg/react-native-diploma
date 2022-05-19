@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Platform } from "react-native";
+
 import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SignInScreen } from "./screens/auth/sign-in";
-import { SignUpScreen } from "./screens/auth/sign-up";
-import { CreateAccountScreen } from "./screens/auth/create-account";
-import { HomeScreen } from "./screens/main/home";
+
+import { SignInScreen } from "./screens/auth/SignIn";
+import { SignUpScreen } from "./screens/auth/SignUp";
+import { CreateAccountScreen } from "./screens/auth/CreateAccount";
+
+import { DrawerScreen } from "./screens/main/Drower";
+
 import { LogBox } from 'react-native';
 import { auth } from "./firebase/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
@@ -35,7 +40,7 @@ export default function App() {
     onAuthStateChanged(auth, (user)=>{
       if (user) {
         if(user.displayName != null){
-          setScreen('HomeScreen')
+          setScreen('DrowerScreen')
         }
         else{
           setScreen('Create Account')
@@ -46,61 +51,58 @@ export default function App() {
       }
       if(initializing) setInitializing(false)
     })
-  }, [])
-  
+  }, [])  
 
   if (initializing) return null;
-  else{
-    return (
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName = {screen}
-          >
-            <Stack.Screen
-              name="Sign In"
-              component={SignInScreen}
-              options={{
-                transitionSpec: {
-                  open: config,
-                  close: config,
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Sign Up"
-              component={SignUpScreen}
-              options={{
-                transitionSpec: {
-                  open: config,
-                  close: config,
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Create Account"
-              component={CreateAccountScreen}
-              options={{
-                transitionSpec: {
-                  open: config,
-                  close: config,
-                },
-              }}
-            />
-            <Stack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              options={{
-                transitionSpec: {
-                  open: {},
-                  close: config,
-                },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    );
-  }
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName = {screen}
+        >
+          <Stack.Screen
+            name="Sign In"
+            component={SignInScreen}
+            options={{
+              transitionSpec: {
+                open: config,
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Sign Up"
+            component={SignUpScreen}
+            options={{
+              transitionSpec: {
+                open: config,
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Create Account"
+            component={CreateAccountScreen}
+            options={{
+              transitionSpec: {
+                open: config,
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="DrowerScreen"
+            component={DrawerScreen}
+            options={{
+              transitionSpec: {
+                open: {},
+                close: config,
+              },
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 }
