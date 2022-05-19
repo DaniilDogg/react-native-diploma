@@ -6,7 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { Avatar, Icon, Text } from "@rneui/base";
-import { auth, firestore } from "./../../../firebase/firebase-config";
+import { auth, firestore } from "../../../firebase/firebase-config";
 
 export const CustomDrawer = (props) => {
   const blankAvatar = "./../../../assets/images/blank-profile-picture.jpg";

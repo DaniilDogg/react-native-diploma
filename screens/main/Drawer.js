@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-import { CustomDrawer } from "./components/CustomDrower";
+import { CustomDrawer } from "./components/CustomDrawer";
 
 import { ProfileScreen } from "./ProfileScreen";
 import { ChatScreen } from "./Chat";

@@ -11,7 +11,7 @@ import { SignInScreen } from "./screens/auth/SignIn";
 import { SignUpScreen } from "./screens/auth/SignUp";
 import { CreateAccountScreen } from "./screens/auth/CreateAccount";
 
-import { DrawerScreen } from "./screens/main/Drower";
+import { DrawerScreen } from "./screens/main/Drawer";
 
 import { LogBox } from 'react-native';
 import { auth } from "./firebase/firebase-config";
@@ -40,10 +40,10 @@ export default function App() {
     onAuthStateChanged(auth, (user)=>{
       if (user) {
         if(user.displayName != null){
-          setScreen('DrowerScreen')
+          setScreen('DrawerScreen')
         }
         else{
-          setScreen('Create Account')
+          setScreen('CreateAccount')
         }
       }
       else {
@@ -82,7 +82,7 @@ export default function App() {
             }}
           />
           <Stack.Screen
-            name="Create Account"
+            name="CreateAccount"
             component={CreateAccountScreen}
             options={{
               transitionSpec: {
@@ -92,7 +92,7 @@ export default function App() {
             }}
           />
           <Stack.Screen
-            name="DrowerScreen"
+            name="DrawerScreen"
             component={DrawerScreen}
             options={{
               transitionSpec: {

@@ -84,7 +84,7 @@ export const CreateAccountScreen = ({ navigation }) => {
       location: location,
     });
     setIsLoading(false);
-    navigation.replace("DrowerScreen");
+    navigation.replace("DrawerScreen");
   };
 
   return (

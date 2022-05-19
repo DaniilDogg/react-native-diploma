@@ -44,9 +44,9 @@ export const SignInScreen = ({ navigation }) => {
         // Signed in
         const user = userCredential.user;
         if (user.displayName === null) {
-          navigation.navigate("Create Account");
+          navigation.navigate("CreateAccount");
         } else {
-          navigation.replace("DrowerScreen");
+          navigation.replace("DrawerScreen");
         }
       })
       .catch((error) => {

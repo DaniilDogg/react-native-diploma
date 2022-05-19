@@ -62,7 +62,7 @@ export const SignUpScreen = ({ route, navigation }) => {
           displayName: null,
           photoURL: 'https://firebasestorage.googleapis.com/v0/b/react-native-diploma.appspot.com/o/avatars%2Fblank-profile-picture.jpg?alt=media&token=bfaababe-f3da-4461-ad2b-bbbe3099ca21',
         }).then(() => {
-          navigation.navigate("Create Account");
+          navigation.navigate("CreateAccount");
         });
       })
       .catch((error) => {
