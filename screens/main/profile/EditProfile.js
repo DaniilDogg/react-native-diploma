@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, DeviceEventEmitter } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, Button, Avatar, Text, Icon } from "@rneui/base";
@@ -58,7 +58,8 @@ export const EditProfile = (props) => {
       return;
     }
     if(oldImageURI == imageURI && oldName == name){
-      props.navigation.replace("Profile")
+      props.navigation.goBack()
+      return
     }
     setIsLoading(true);
     const user = auth.currentUser;
@@ -74,6 +75,7 @@ export const EditProfile = (props) => {
       } catch (error) {
         console.log(error);
         alert("Can't upload avatar.");
+        return
       }
     }
     updateProfile(user, {
@@ -86,9 +88,9 @@ export const EditProfile = (props) => {
       photoURL: photoUrl,
       location: location,
     });
-    setIsLoading(false);
     DeviceEventEmitter.emit("event.edited", "edited");
-    props.navigation.replace("Profile")
+    setIsLoading(false);
+    props.navigation.goBack()
   };
 
   return (
@@ -101,7 +103,7 @@ export const EditProfile = (props) => {
             </Text>
 
             <Avatar
-              activeOpalocation={0.2}
+              activeOpalocation={0.4}
               avatarStyle={{}}
               containerStyle={[styles.avatar]}
               icon={{}}
@@ -218,7 +220,6 @@ const styles = StyleSheet.create({
   buttonTitle: {
     marginVertical: 2,
     fontSize: 25,
-    color: '#000',
   },
   input: {
     marginVertical: 3,

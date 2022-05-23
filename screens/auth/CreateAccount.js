@@ -18,7 +18,6 @@ import {
 import * as ImagePicker from "expo-image-picker";
 
 export const CreateAccountScreen = ({ navigation }) => {
-  
   const blankAvatar = "./../../assets/images/blank-profile-picture.jpg";
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,10 +51,10 @@ export const CreateAccountScreen = ({ navigation }) => {
   };
 
   const createAccount = async () => {
-    if(name == ""){
+    if (name == "") {
       setNameErrorMessage("Enter your name.");
       setNameStyle(authStyle.errorContainer);
-      return
+      return;
     }
     setIsLoading(true);
     const user = auth.currentUser;
@@ -72,7 +71,7 @@ export const CreateAccountScreen = ({ navigation }) => {
         console.log(error);
         alert("Can't upload avatar.");
       }
-    }    
+    }
     updateProfile(user, {
       displayName: name,
       photoURL: photoUrl,
@@ -88,8 +87,8 @@ export const CreateAccountScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{height: '100%'}}>
-      <ScrollView style={{backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ height:'100%', backgroundColor: "#fff" }}>
+      <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={authStyle.main_container}>
           <View style={authStyle.view}>
             <Text h3 style={authStyle.pageTitle}>
@@ -108,7 +107,9 @@ export const CreateAccountScreen = ({ navigation }) => {
               placeholderStyle={{}}
               rounded
               size="xlarge"
-              source={imageURI == null ? require(blankAvatar) : { uri: imageURI }}
+              source={
+                imageURI == null ? require(blankAvatar) : { uri: imageURI }
+              }
             >
               <View style={[styles.icon]}>
                 <Icon
@@ -128,9 +129,9 @@ export const CreateAccountScreen = ({ navigation }) => {
               leftIcon={{ type: "ionicon", name: "person-outline" }}
               value={name}
               onChangeText={(text) => {
-                setName(text)
+                setName(text);
               }}
-              onEndEditing={()=>{
+              onEndEditing={() => {
                 setNameErrorMessage("");
                 setNameStyle({});
               }}
@@ -139,38 +140,41 @@ export const CreateAccountScreen = ({ navigation }) => {
               errorMessage={nameErrorMessage}
             />
             <Input
-              containerStyle={[authStyle.input], {display: 'none'}}
+              containerStyle={([authStyle.input], { display: "none" })}
               labelStyle={[authStyle.lable]}
               placeholder="Your location"
               label="Location"
-              leftIcon={{ type: "material-community", name: "home-city-outline" }}
+              leftIcon={{
+                type: "material-community",
+                name: "home-city-outline",
+              }}
               value={location}
               onChangeText={(text) => setLocation(text)}
             />
-            {isLoading ?
-            <Button
-              title="Create account"
-              buttonStyle={[authStyle.button]}
-              titleStyle={[authStyle.buttonTitle]}
-              onPress={createAccount}
-              loading
-              loadingStyle={[authStyle.button]}
-              loadingProps={{ animating: true }}
-              disabled
-              disabledStyle={[authStyle.button]}
-            />
-            :
-            <Button
-            title="Create account"
-            buttonStyle={[authStyle.button]}
-            titleStyle={[authStyle.buttonTitle]}
-            onPress={createAccount}
-            />
-            }
+            {isLoading ? (
+              <Button
+                title="Create account"
+                buttonStyle={[authStyle.button]}
+                titleStyle={[authStyle.buttonTitle]}
+                onPress={createAccount}
+                loading
+                loadingStyle={[authStyle.button]}
+                loadingProps={{ animating: true }}
+                disabled
+                disabledStyle={[authStyle.button]}
+              />
+            ) : (
+              <Button
+                title="Create account"
+                buttonStyle={[authStyle.button]}
+                titleStyle={[authStyle.buttonTitle]}
+                onPress={createAccount}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

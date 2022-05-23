@@ -16,7 +16,7 @@ export const DrawerScreen = () => {
     <SafeAreaProvider>
       <Drawer.Navigator
         drawerContent={props => (<CustomDrawer {...props}/>)}
-        initialRouteName = {"Pfofile"}
+        initialRouteName = {"Profile"}
         screenOptions={{
           headerShown: true,
           swipeEnabled: false,
@@ -27,7 +27,7 @@ export const DrawerScreen = () => {
           drawerActiveTintColor: '#000',
           drawerInactiveTintColor: '#000',
           drawerLabelStyle: {
-            marginLeft: -10,
+            marginLeft: -15,
             fontSize: 15,
           },
         }}

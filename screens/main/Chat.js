@@ -13,7 +13,7 @@ import {
   Message,
   MessageText,
   Time,
-  Composer
+  Composer,
 } from "react-native-gifted-chat";
 import { StyleSheet, View, Platform, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,37 +25,55 @@ import {
   orderBy,
   onSnapshot,
   query,
+  doc,
+  get,
+  getDoc,
 } from "firebase/firestore";
 
 export const ChatScreen = (props) => {
   props?.navigation?.closeDrawer();
-  const massageContainerColor = '#A2A7B9'
-  const maxWidth = Dimensions.get('window').width * 0.75
+  const massageContainerColor = "#E8B974";
+  const selfMassageContainerColor = "#A2A7B9";
+  const maxWidth = Dimensions.get("window").width * 0.75;
   const [messages, setMessages] = useState([]);
   const userColor = new Map();
   const colors = [
-    '#B500A4',
-    '#1AFF21', 
-    '#427EFF',
-    '#FF9516', 
-    '#FF1717', 
-    '#0017FF', 
-    '#00DAD6',
+    "#E31EF7",
+    "#427EFF",
+    "#2BE219",
+    "#FF1717",
+    "#0017FF",
+    "#00DAD6",
   ];
+
+  const users_data = new Map();
 
   useLayoutEffect(() => {
     const collectionRef = collection(firestore, "chat");
     const q = query(collectionRef, orderBy("createdAt", "desc"));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      setMessages(
-        querySnapshot.docs.map((doc) => ({
-          _id: doc.data()._id,
-          createdAt: doc.data().createdAt.toDate(),
-          text: doc.data().text,
-          user: doc.data().user,
-        }))
-      );
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const msgs = await Promise.all(querySnapshot.docs.map(async (document) => {
+        
+        const message = {
+          _id: document.data()._id,
+          createdAt: document.data().createdAt.toDate(),
+          text: document.data().text,
+          user: document.data().user,
+        };
+
+        if (!users_data.has(message.user._id)) {
+          const docRef = doc(firestore, 'users', message.user._id)
+          const data = await getDoc(docRef);
+          users_data.set(message.user._id, data.data());
+        }
+        
+        message.user.name = users_data.get(message.user._id).displayName;
+        message.user.avatar = users_data.get(message.user._id).photoURL;
+
+        return message;
+      }))
+      setMessages(msgs);
     });
     return unsubscribe;
   }, []);
@@ -83,38 +101,38 @@ export const ChatScreen = (props) => {
         return (
           <Button
             buttonStyle={[styles.sendButton]}
-            icon={<Icon type="ionico" name="send" size={35} color="#0B42FF" />}
+            icon={<Icon type="ionico" name="send" size={35} color="#FF8F19" />}
             onPress={() => _onSend(props)}
           />
         );
       }
     };
 
-    return (      
+    return (
       <InputToolbar
         {...props}
         containerStyle={{
           backgroundColor: "white",
-          borderTopColor: "#E8E8E8",
+          borderTopColor: "#C08F61",
           borderTopWidth: 1,
           minHeight: 55,
-          justifyContent: 'center',
-          alignItems: 'stretch'
+          justifyContent: "center",
+          alignItems: "stretch",
         }}
         renderSend={SendButton}
       />
     );
   };
 
-  const CustomComposer = (props) =>(
+  const CustomComposer = (props) => (
     <Composer
-    {...props}
-    textInputStyle={{
-      textAlign: 'justify',
-      textAlignVertical: 'center'
-    }}
+      {...props}
+      textInputStyle={{
+        textAlign: "justify",
+        textAlignVertical: "center",
+      }}
     />
-  )
+  );
 
   const CustomMessage = (props) => (
     <Message
@@ -126,14 +144,14 @@ export const ChatScreen = (props) => {
       }}
       */
     />
-  )
+  );
 
   const CustomMessageText = (props) => (
     <MessageText
       {...props}
       containerStyle={{
-        left: {backgroundColor: '#A2A7B9'},
-        right: {}
+        left: { backgroundColor: massageContainerColor },
+        right:{ backgroundColor: selfMassageContainerColor },
       }}
       /*
       textStyle={{
@@ -149,131 +167,138 @@ export const ChatScreen = (props) => {
     />
   );
 
-  
   const CustomBubble = (props) => {
-    const checkUser = props.currentMessage.user._id != props.user._id
-    const checkMassage = props?.previousMessage?.user?._id != props.currentMessage.user._id
-    const checkNextMassage = props.currentMessage.user?._id == props?.nextMessage?.user?._id
-    
+    const checkUser = props.currentMessage.user._id != props.user._id;
+    const checkMassage =
+      props?.previousMessage?.user?._id != props.currentMessage.user._id;
+    const checkNextMassage =
+      props.currentMessage.user?._id == props?.nextMessage?.user?._id;
+
     const UserName = (props) => {
-      const name = props.currentMessage.user.name
-      const id = props.currentMessage.user._id
-      if(!userColor.has(id)){
-        userColor.set(id, colors[userColor.size % colors.length])
+      const name = props.currentMessage.user.name;
+      const id = props.currentMessage.user._id;
+      if (!userColor.has(id)) {
+        userColor.set(id, colors[userColor.size % colors.length]);
       }
-      const color = userColor.get(id)
-      return(
+      const color = userColor.get(id);
+      return (
         <Text
-        style={{
-          alignSelf: "flex-start",
-          color: color,
-          fontSize: 15,
-          fontWeight: "normal",
-          paddingTop: 5,
-          paddingLeft: 5,
-          paddingRight: 5,
-          width: 'auto',
-        }}>
+          style={{
+            alignSelf: "flex-start",
+            color: color,
+            fontSize: 15,
+            fontWeight: "normal",
+            paddingTop: 5,
+            paddingLeft: 5,
+            paddingRight: 5,
+            width: "auto",
+          }}
+        >
           {name}
         </Text>
-      )
-    }
+      );
+    };
 
     const viewStyle = StyleSheet.create({
-      all:{
-        minWidth:80,
+      all: {
+        minWidth: 80,
         maxWidth: maxWidth,
         borderRadius: 10,
         borderTopRightRadius: 10,
       },
-      left:{
+      left: {
         padding: 0,
-        alignSelf: 'flex-start',
-        alignItems: 'flex-start',
-        width: 'auto',
+        alignSelf: "flex-start",
+        alignItems: "flex-start",
+        width: "auto",
         backgroundColor: massageContainerColor,
         borderTopLeftRadius: 10,
       },
-    })
+    });
 
     const formatAMPM = (date) => {
       var hours = date.getHours();
       var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
+      var ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12;
       hours = hours ? hours : 12; // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      var strTime = hours + ':' + minutes + ' ' + ampm;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
       return strTime;
-    }
-    return(
-    <View style={[viewStyle.all, checkUser ? viewStyle.left : {}, checkNextMassage ? {borderBottomLeftRadius: 0} : {marginBottom: 15}]}>
-      {((checkUser) && (checkMassage))&&
-        UserName(props)
-      }
-      <Bubble
-        {...props}
-        /*     
+    };
+    return (
+      <View
+        style={[
+          viewStyle.all,
+          checkUser ? viewStyle.left : {},
+          checkNextMassage
+            ? { borderBottomLeftRadius: 0 }
+            : { marginBottom: 15 },
+        ]}
+      >
+        {checkUser && checkMassage && UserName(props)}
+        <Bubble
+          {...props}
+          /*     
         containerStyle={{
           left: { borderColor: 'teal', borderWidth: 8, borderTopRightRadius: 10},
           right: {},
         }}
         */
-        wrapperStyle={{
-          left: {
-            backgroundColor: '',
-            marginRight: 0,
-            width: '100%',
-            borderTopRightRadius: 10,
-            overflow: 'hidden',
-          },
-          right: {},
-        }}
-        bottomContainerStyle={{
-          left: {alignSelf: "flex-end", display: 'none'},
-          right: {},
-        }}
-        containerToNextStyle={{
-          left: {backgroundColor: '', borderTopRightRadius: 10},
-          right: {},
-        }}
-        containerToPreviousStyle={{
-          left: {backgroundColor: '', borderTopRightRadius: 10},
-          right: {},
-        }}
-      >
-      </Bubble>
-      { checkUser &&
-      <Text
-      style={{
-        color: '#000',
-        fontSize: 11,
-        textAlign: 'right',
-        width: '100%',
-        paddingRight: 7,
-        marginBottom: 2,
-      }}>
-        {formatAMPM(props.currentMessage.createdAt)}
-      </Text>
-      }
-    </View>
-  )
-}
+          wrapperStyle={{
+            left: {
+              marginRight: 0,
+              width: "100%",
+              borderTopRightRadius: 10,
+              overflow: "hidden",
+            },
+            right: {overflow: "hidden", backgroundColor: selfMassageContainerColor},
+          }}
+          bottomContainerStyle={{
+            left: { alignSelf: "flex-end", display: "none" },
+            right: {},
+          }}
+          containerToNextStyle={{
+            left: { borderTopRightRadius: 10 },
+            right: {},
+          }}
+          containerToPreviousStyle={{
+            left: { borderTopRightRadius: 10 },
+            right: {},
+          }}
+        ></Bubble>
+        {checkUser && (
+          <Text
+            style={{
+              color: "#000",
+              fontSize: 11,
+              textAlign: "right",
+              width: "100%",
+              paddingRight: 7,
+              marginBottom: 2,
+            }}
+          >
+            {formatAMPM(props.currentMessage.createdAt)}
+          </Text>
+        )}
+      </View>
+    );
+  };
 
-  const CustomTime = props => {
+  const CustomTime = (props) => {
     return (
       <Time
         {...props}
         timeTextStyle={{
           left: {
-            color: '#000',
+            color: "#000",
             fontSize: 11,
-            textAlign: 'right', // or position: 'right'
+            textAlign: "right", // or position: 'right'
           },
           right: {
-            color: '#000',
+            color: "#000",
             fontSize: 11,
-            textAlign: 'right', // or position: 'right'
+            textAlign: "right", // or position: 'right'
           },
         }}
       />
@@ -295,7 +320,7 @@ export const ChatScreen = (props) => {
       }}
       listViewProps={{
         style: {
-          backgroundColor: '#EBE0D4',
+          backgroundColor: "#EBE0D4",
         },
       }}
       textInputStyle={styles.inputStyle}
@@ -313,8 +338,8 @@ const styles = StyleSheet.create({
     backgroundColor: "",
     width: 80,
   },
-  inputStyle:{
+  inputStyle: {
     fontSize: 16,
     lineHeight: 25,
-  }
+  },
 });

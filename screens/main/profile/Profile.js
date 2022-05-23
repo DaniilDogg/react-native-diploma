@@ -17,10 +17,19 @@ export const Profile = (props) => {
   const [imageURI, setImageURI] = useState(auth?.currentUser?.photoURL);
   const [location, setLocation] = useState("");
 
-  const subscription = DeviceEventEmitter.addListener("event.edited", (eventData) => {
-    setImageURI(auth?.currentUser?.photoURL);
-    setDisplayName(auth?.currentUser?.displayName);
-  })
+  useEffect(()=>{
+    const subscription = DeviceEventEmitter.addListener("event.edited", async (eventData) => {
+      setTimeout(()=>{
+        setImageURI(auth?.currentUser?.photoURL);
+        setDisplayName(auth?.currentUser?.displayName);
+      }, 500)
+      
+    })
+    return () => {
+      subscription.remove()
+      DeviceEventEmitter.removeAllListeners('event.edited');
+    }
+  }, [])
 
   return (
     <View style={{ height: "100%" }}>

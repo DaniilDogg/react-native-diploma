@@ -60,7 +60,8 @@ export const SignUpScreen = ({ route, navigation }) => {
         const user = userCredential.user;
         updateProfile(user, {
           displayName: null,
-          photoURL: 'https://firebasestorage.googleapis.com/v0/b/react-native-diploma.appspot.com/o/avatars%2Fblank-profile-picture.jpg?alt=media&token=bfaababe-f3da-4461-ad2b-bbbe3099ca21',
+          photoURL:
+            "https://firebasestorage.googleapis.com/v0/b/react-native-diploma.appspot.com/o/avatars%2Fblank-profile-picture.jpg?alt=media&token=bfaababe-f3da-4461-ad2b-bbbe3099ca21",
         }).then(() => {
           navigation.navigate("CreateAccount");
         });
@@ -78,7 +79,7 @@ export const SignUpScreen = ({ route, navigation }) => {
 
   const checkCode = () => {
     if (code != "") {
-      if (code != "Слава_Украине!") {
+      if (code != "Glory_to_Ukraine!") {
         inputs[0] = false;
         setCodeErrorMessage("Неправильный код");
         setCodeStyle(authStyle.errorContainer);
@@ -144,111 +145,116 @@ export const SignUpScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: "#fff" }}>
-      <SafeAreaView style={authStyle.main_container}>
-        <View style={authStyle.view}>
-          <Text h3 style={authStyle.pageTitle}>
-            Sing Up
-          </Text>
-          <Input
-            labelStyle={[authStyle.lable]}
-            placeholder="Your invitation code"
-            label="Invitation code"
-            leftIcon={{ type: "ionicon", name: "key-outline" }}
-            value={code}
-            onChangeText={(text) => setCode(text.replace(/\s/g, ""))}
-            renderErrorMessage
-            errorStyle={authStyle.errorText}
-            errorMessage={codeErrorMessage}
-            containerStyle={[authStyle.input, codeStyle]}
-            onEndEditing={checkCode}
-          />
-          <Input
-            labelStyle={[authStyle.lable]}
-            placeholder="Email"
-            label="Email"
-            leftIcon={{ type: "fontisto", name: "email" }}
-            value={email}
-            onChangeText={(text) => setEmail(text.replace(/\s/g, ""))}
-            renderErrorMessage
-            errorStyle={authStyle.errorText}
-            errorMessage={emailErrorMessage}
-            containerStyle={[authStyle.input, emailStyle]}
-            onEndEditing={()=>{
-              setEmail((prevEmail)=>{
-                return prevEmail.toLowerCase()
-              })
-              checkEmail()
-            }}
-          />
+    <SafeAreaView style={{ height:'100%', backgroundColor: "#fff" }}>
+      <ScrollView style={{ backgroundColor: "#fff" }}>
+        <View style={authStyle.main_container}>
+          <View style={authStyle.view}>
+            <Text h3 style={authStyle.pageTitle}>
+              Sing Up
+            </Text>
+            <Input
+              labelStyle={[authStyle.lable]}
+              placeholder="Your invitation code"
+              label="Invitation code"
+              leftIcon={{ type: "ionicon", name: "key-outline" }}
+              value={code}
+              onChangeText={(text) => setCode(text.replace(/\s/g, ""))}
+              renderErrorMessage
+              errorStyle={authStyle.errorText}
+              errorMessage={codeErrorMessage}
+              containerStyle={[authStyle.input, codeStyle]}
+              onEndEditing={checkCode}
+            />
+            <Input
+              labelStyle={[authStyle.lable]}
+              placeholder="Email"
+              label="Email"
+              leftIcon={{ type: "fontisto", name: "email" }}
+              value={email}
+              onChangeText={(text) => setEmail(text.replace(/\s/g, ""))}
+              renderErrorMessage
+              errorStyle={authStyle.errorText}
+              errorMessage={emailErrorMessage}
+              containerStyle={[authStyle.input, emailStyle]}
+              onEndEditing={() => {
+                setEmail((prevEmail) => {
+                  return prevEmail.toLowerCase();
+                });
+                checkEmail();
+              }}
+            />
 
-          <Input
-            labelStyle={[authStyle.lable]}
-            placeholder="Password"
-            label="Password"
-            leftIcon={{ type: "feather", name: "lock" }}
-            value={password}
-            onChangeText={(text) => setPassword(text.replace(/\s/g, ""))}
-            secureTextEntry
-            renderErrorMessage
-            errorStyle={authStyle.errorText}
-            errorMessage={passwordErrorMessage}
-            containerStyle={[authStyle.input, passwordStyle]}
-            onEndEditing={checkPassword}
-          />
-          <Input
-            labelStyle={[authStyle.lable]}
-            placeholder="Confirm the password"
-            label="Password"
-            leftIcon={{ type: "feather", name: "lock" }}
-            value={passwordConfirm}
-            onChangeText={(text) => setPasswordConfirm(text.replace(/\s/g, ""))}
-            secureTextEntry
-            renderErrorMessage
-            errorStyle={authStyle.errorText}
-            errorMessage={passwordConfirmErrorMessage}
-            containerStyle={[authStyle.input, passwordConfirmStyle]}
-            onEndEditing={checkPasswordConfirm}
-          />
-          {isLoading ? (
-            <View>
-              <Button
-                title="Sign Up"
-                buttonStyle={[authStyle.button]}
-                titleStyle={[authStyle.buttonTitle]}
-                onPress={signUpUser}
-                loading
-                loadingStyle={[authStyle.button]}
-                loadingProps={{ animating: true }}
-                disabled
-                disabledStyle={[authStyle.button]}
-              />
-              <Button
-                buttonStyle={[authStyle.button, authStyle.secondButton]}
-                title="Sign In"
-                titleStyle={[authStyle.buttonTitle, { color: "#007AFF" }]}
-                onPress={() => navigation.navigate("Sign In")}
-                disabled
-              />
-            </View>
-          ) : (
-            <View>
-              <Button
-                title="Sign Up"
-                buttonStyle={[authStyle.button]}
-                titleStyle={[authStyle.buttonTitle]}
-                onPress={signUpUser}
-              />
-              <Button
-                buttonStyle={[authStyle.button, authStyle.secondButton]}
-                title="Sign In"
-                titleStyle={[authStyle.buttonTitle, { color: "#007AFF" }]}
-                onPress={() => navigation.navigate("Sign In")}
-              />
-            </View>
-          )}
+            <Input
+              labelStyle={[authStyle.lable]}
+              placeholder="Password"
+              label="Password"
+              leftIcon={{ type: "feather", name: "lock" }}
+              value={password}
+              onChangeText={(text) => setPassword(text.replace(/\s/g, ""))}
+              secureTextEntry
+              renderErrorMessage
+              errorStyle={authStyle.errorText}
+              errorMessage={passwordErrorMessage}
+              containerStyle={[authStyle.input, passwordStyle]}
+              onEndEditing={checkPassword}
+            />
+            <Input
+              labelStyle={[authStyle.lable]}
+              placeholder="Confirm the password"
+              label="Password"
+              leftIcon={{ type: "feather", name: "lock" }}
+              value={passwordConfirm}
+              onChangeText={(text) =>
+                setPasswordConfirm(text.replace(/\s/g, ""))
+              }
+              secureTextEntry
+              renderErrorMessage
+              errorStyle={authStyle.errorText}
+              errorMessage={passwordConfirmErrorMessage}
+              containerStyle={[authStyle.input, passwordConfirmStyle]}
+              onEndEditing={checkPasswordConfirm}
+            />
+            {isLoading ? (
+              <View>
+                <Button
+                  title="Sign Up"
+                  buttonStyle={[authStyle.button]}
+                  titleStyle={[authStyle.buttonTitle]}
+                  onPress={signUpUser}
+                  loading
+                  loadingStyle={[authStyle.button]}
+                  loadingProps={{ animating: true }}
+                  disabled
+                  disabledStyle={[authStyle.button]}
+                />
+                <Button
+                  buttonStyle={[authStyle.button, authStyle.secondButton]}
+                  title="Sign In"
+                  titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
+                  onPress={() => navigation.navigate("Sign In")}
+                  disabled
+                  disabledStyle={{ backgroundColor: "#E3AC7A" }}
+                />
+              </View>
+            ) : (
+              <View>
+                <Button
+                  title="Sign Up"
+                  buttonStyle={[authStyle.button]}
+                  titleStyle={[authStyle.buttonTitle]}
+                  onPress={signUpUser}
+                />
+                <Button
+                  buttonStyle={[authStyle.button, authStyle.secondButton]}
+                  title="Sign In"
+                  titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
+                  onPress={() => navigation.navigate("Sign In")}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
