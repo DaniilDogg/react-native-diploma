@@ -4,7 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { CustomDrawer } from "./components/CustomDrawer";
 
-import { ProfileScreen } from "./ProfileScreen";
+import { ProfileScreen } from "./profile/ProfileScreen";
 import { ChatScreen } from "./Chat";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,7 +16,7 @@ export const DrawerScreen = () => {
     <SafeAreaProvider>
       <Drawer.Navigator
         drawerContent={props => (<CustomDrawer {...props}/>)}
-        initialRouteName = {"Chat"}
+        initialRouteName = {"Pfofile"}
         screenOptions={{
           headerShown: true,
           swipeEnabled: false,

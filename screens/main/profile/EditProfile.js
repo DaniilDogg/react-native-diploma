@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, DeviceEventEmitter } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, Button, Avatar, Text, Icon } from "@rneui/base";
 //
 //Firebase
-import { auth, storage, firestore } from "../../firebase/firebase-config";
+import { auth, storage, firestore } from "../../../firebase/firebase-config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import {
@@ -15,17 +15,19 @@ import {
 //
 import * as ImagePicker from "expo-image-picker";
 
-export const EditProfileScreen = (props) => {
-  props.navigation.closeDrawer();
-  const blankAvatar = "./../../assets/images/blank-profile-picture.jpg";
+export const EditProfile = (props) => {
+  const blankAvatar = "./../../../assets/images/blank-profile-picture.jpg";
   const [isLoading, setIsLoading] = useState(false);
 
-  const [name, setName] = useState(auth?.currentUser?.displayName);
+  const [oldName, setOldName] = useState(auth?.currentUser?.displayName);
+  const [name, setName] = useState(oldName);
   const [nameStyle, setNameStyle] = useState({});
   const [nameErrorMessage, setNameErrorMessage] = useState("");
 
   const [location, setLocation] = useState("");
-  const [imageURI, setImageURI] = useState(auth?.currentUser?.photoURL);
+
+  const [oldImageURI, setOldImageURI] = useState(auth?.currentUser?.photoURL);
+  const [imageURI, setImageURI] = useState(oldImageURI);
 
   const pickImage = async () => {
     if (Platform.OS !== "web") {
@@ -55,6 +57,9 @@ export const EditProfileScreen = (props) => {
       setNameStyle(styles.errorContainer);
       return;
     }
+    if(oldImageURI == imageURI && oldName == name){
+      props.navigation.replace("Profile")
+    }
     setIsLoading(true);
     const user = auth.currentUser;
     let photoUrl = user.photoURL;
@@ -82,7 +87,8 @@ export const EditProfileScreen = (props) => {
       location: location,
     });
     setIsLoading(false);
-    alert('Changes saved')
+    DeviceEventEmitter.emit("event.edited", "edited");
+    props.navigation.replace("Profile")
   };
 
   return (
@@ -211,7 +217,8 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     marginVertical: 2,
-    fontSize: 22,
+    fontSize: 25,
+    color: '#000',
   },
   input: {
     marginVertical: 3,
@@ -221,8 +228,8 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: "center",
     width: "70%",
-    backgroundColor: "#007AFF",
-    borderColor: "#007AFF",
+    backgroundColor: "#FFA046",
+    borderColor: "#FFA046",
     borderWidth: 1,
     borderRadius: 10,
     marginVertical: 7,

@@ -10,12 +10,13 @@ import { auth, firestore } from "../../../firebase/firebase-config";
 
 export const CustomDrawer = (props) => {
   const blankAvatar = "./../../../assets/images/blank-profile-picture.jpg";
-  const [imageURI, setImageURI] = useState();
-  const [displayName, setDisplayName] = useState();
+
+  const [imageURI, setImageURI] = useState(null);
+  const [displayName, setDisplayName] = useState(null);
   useEffect(()=>{
     setImageURI(auth?.currentUser?.photoURL);
     setDisplayName(auth?.currentUser?.displayName);
-  }, [auth?.currentUser?.photoURL, auth?.currentUser?.displayName])
+  }, [auth.currentUser.photoURL, auth.currentUser.displayName])
 
   return (
     <SafeAreaView style={[styles.backgroundColor, {flex: 1 }]}>
