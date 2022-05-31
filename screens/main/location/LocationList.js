@@ -37,8 +37,7 @@ export const LocationList = (props) => {
           await updateDoc(docRef, {
             location: newLocation,
           });
-          DeviceEventEmitter.emit("event.location", "location");
-          props.navigation.replace("LocationFilterScreen");
+          props.navigation.replace("LocationFilterScreen", {location: newLocation});
         };
 
         if (item == "Уся Україна") {

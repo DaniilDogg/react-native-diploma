@@ -27,23 +27,10 @@ export const LocationFilterScreen = (props) => {
     setLocation(userData.data().location.replace(", ", ",\n"));
     setNotLoaded(false);
   };
+  
   useLayoutEffect(async () => {
     getLocation();
-
-    const subscription = DeviceEventEmitter.addListener(
-      "event.location",
-      async (eventData) => {
-        setTimeout(() => {
-          getLocation();
-        }, 500);
-      }
-    );
-
-    return () => {
-      subscription.remove();
-      DeviceEventEmitter.removeAllListeners("event.location");
-    };
-  }, []);
+  }, [props.route.params.location]);
 
   if (userId == null || notLoaded) return null;
 
