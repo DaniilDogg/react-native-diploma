@@ -8,28 +8,28 @@ import { auth, storage, firestore } from "../../../firebase/firebase-config";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export const Profile = (props) => {
-  //props.navigation.closeDrawer();
   const blankAvatar = "./../../../assets/images/blank-profile-picture.jpg";
 
-  const [displayName, setDisplayName] = useState(
-    auth?.currentUser?.displayName
-  );
-  const [imageURI, setImageURI] = useState(auth?.currentUser?.photoURL);
+  const [displayName, setDisplayName] = useState(null);
+  const [imageURI, setImageURI] = useState(null);
   const [location, setLocation] = useState("");
 
   useEffect(()=>{
+    setDisplayName(auth.currentUser.displayName);
+    setImageURI(auth.currentUser.photoURL);
     const subscription = DeviceEventEmitter.addListener("event.edited", async (eventData) => {
       setTimeout(()=>{
         setImageURI(auth?.currentUser?.photoURL);
         setDisplayName(auth?.currentUser?.displayName);
       }, 500)
-      
     })
     return () => {
       subscription.remove()
       DeviceEventEmitter.removeAllListeners('event.edited');
     }
   }, [])
+
+  if(displayName == null) return null
 
   return (
     <View style={{ height: "100%" }}>

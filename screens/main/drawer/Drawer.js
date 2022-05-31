@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-import { CustomDrawer } from "./components/CustomDrawer";
+import { CustomDrawer } from "./CustomDrawer";
 
-import { ProfileScreen } from "./profile/ProfileScreen";
-import { ChatScreen } from "./Chat";
+import { ProfileScreen } from "../profile/ProfileScreen";
+import { ChatScreen } from "../volunteering/Chat";
+import { Volunteering } from "../volunteering/VolunteeringStack";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import { SignInScreen } from "../../auth/SignIn";
 
 const Drawer = createDrawerNavigator();
 
@@ -16,7 +19,8 @@ export const DrawerScreen = () => {
     <SafeAreaProvider>
       <Drawer.Navigator
         drawerContent={props => (<CustomDrawer {...props}/>)}
-        initialRouteName = {"Profile"}
+        useLegacyImplementation={true}
+        initialRouteName = {"Volunteering"}
         screenOptions={{
           headerShown: true,
           swipeEnabled: false,
@@ -33,26 +37,24 @@ export const DrawerScreen = () => {
         }}
       >
         <Drawer.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="person-outline" size={22} color={color} />
-          ),
-        }}
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            drawerIcon: ({color}) => (
+              <Ionicons name="person-outline" size={22} color={color} />
+            ),
+          }}
         />
         <Drawer.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="home-outline" size={22} color={color} />
-          ),
-        }}
+          name="Volunteering"
+          component={Volunteering}
+          options={{
+            drawerIcon: ({color}) => (
+              <Ionicons name="home-outline" size={22} color={color} />
+            ),
+          }}
         />
       </Drawer.Navigator>
     </SafeAreaProvider>
   );
 };
-//<Drawer.Screen name="Profile" />
-//<Drawer.Screen name="Log Out"/>

@@ -4,23 +4,21 @@ import React, {
   } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { auth, firestore } from "../../../firebase/firebase-config";
 
 import { Profile } from "./Profile";
 import { EditProfile } from "./EditProfile";
 
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
-export const ProfileScreen = (props) => {  
+export const ProfileScreen = (props) => {
   return (
     <Stack.Navigator
     screenOptions={{ headerShown: false }}
-    initialRouteName = {"Profile"}
+    initialRouteName = {"ProfileScreen"}
     >
       <Stack.Screen
-        name="Profile"
+        name="ProfileScreen"
         component={Profile}
       />
       <Stack.Screen
@@ -30,4 +28,3 @@ export const ProfileScreen = (props) => {
     </Stack.Navigator>
   );
 };
-  //<EditProfileScreen {...props}/>

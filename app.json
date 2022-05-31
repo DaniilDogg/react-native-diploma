@@ -6,6 +6,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+    "description": "Mobile application for coordinating the work of the volunteer movement.",
+    "githubUrl": "https://github.com/DaniilDogg/react-native-diploma"
   }
 }

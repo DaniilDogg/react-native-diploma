@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TouchableHighlight, View, Alert } from "react-native";
+import { StyleSheet, TouchableHighlight, View, Alert, DeviceEventEmitter } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import {
@@ -18,10 +18,23 @@ export const CustomDrawer = (props) => {
 
   const [imageURI, setImageURI] = useState(null);
   const [displayName, setDisplayName] = useState(null);
+
   useEffect(() => {
-    setImageURI(auth?.currentUser?.photoURL);
-    setDisplayName(auth?.currentUser?.displayName);
-  }, [auth.currentUser.photoURL, auth.currentUser.displayName]);
+    setImageURI(auth.currentUser.photoURL);
+    setDisplayName(auth.currentUser.displayName);
+
+    const subscription = DeviceEventEmitter.addListener("event.edited", async (eventData) => {
+      setTimeout(()=>{
+        setImageURI(auth.currentUser.photoURL);
+        setDisplayName(auth.currentUser.displayName);
+      }, 500)
+    })
+
+    return () => {
+      subscription.remove()
+      DeviceEventEmitter.removeAllListeners('event.edited');
+    }
+  }, []);
 
   const showConfirmDialog = () => {
     return Alert.alert(
@@ -31,7 +44,7 @@ export const CustomDrawer = (props) => {
         // The "Yes" button
         {
           text: "Yes",
-          onPress: singOutUser
+          onPress: singOutUser,
         },
         // The "No" button
         // Does nothing but dismiss the dialog when tapped
@@ -123,7 +136,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     flexWrap: "wrap",
-    fontFamily: "Verdana",
     fontWeight: "700",
     fontSize: 17,
     marginLeft: 10,

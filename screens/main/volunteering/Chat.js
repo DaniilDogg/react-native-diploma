@@ -18,7 +18,7 @@ import {
 import { StyleSheet, View, Platform, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Icon, Text } from "@rneui/base";
-import { auth, firestore } from "../../firebase/firebase-config";
+import { auth, firestore } from "../../../firebase/firebase-config";
 import {
   collection,
   addDoc,
@@ -31,7 +31,6 @@ import {
 } from "firebase/firestore";
 
 export const ChatScreen = (props) => {
-  props?.navigation?.closeDrawer();
   const massageContainerColor = "#E8B974";
   const selfMassageContainerColor = "#A2A7B9";
   const maxWidth = Dimensions.get("window").width * 0.75;
@@ -49,7 +48,7 @@ export const ChatScreen = (props) => {
   const users_data = new Map();
 
   useLayoutEffect(() => {
-    const collectionRef = collection(firestore, "chat");
+    const collectionRef = collection(firestore, `/chats/${props.route.params.volunteering_type}/${props.route.params.task_id}`);
     const q = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
@@ -80,7 +79,7 @@ export const ChatScreen = (props) => {
 
   const onSend = useCallback((messages = []) => {
     const { _id, createdAt, text, user } = messages[0];
-    addDoc(collection(firestore, "chat"), {
+    addDoc(collection(firestore, `/chats/${props.route.params.volunteering_type}/${props.route.params.task_id}`), {
       _id,
       createdAt,
       text,

@@ -10,8 +10,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignInScreen } from "./screens/auth/SignIn";
 import { SignUpScreen } from "./screens/auth/SignUp";
 import { CreateAccountScreen } from "./screens/auth/CreateAccount";
+import { TaskStack } from "./screens/main/volunteering/TaskStack";
 
-import { DrawerScreen } from "./screens/main/Drawer";
+import { DrawerScreen } from "./screens/main/drawer/Drawer";
 
 import { LogBox } from 'react-native';
 import { auth } from "./firebase/firebase-config";
@@ -94,6 +95,16 @@ export default function App() {
           <Stack.Screen
             name="DrawerScreen"
             component={DrawerScreen}
+            options={{
+              transitionSpec: {
+                open: {},
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="TaskStack"
+            component={TaskStack}
             options={{
               transitionSpec: {
                 open: {},
