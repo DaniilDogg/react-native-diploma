@@ -6,7 +6,7 @@ import { Input, Button, Avatar, Text, Icon } from "@rneui/base";
 //Firebase
 import { auth, storage, firestore } from "../../../firebase/firebase-config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { updateDoc, doc } from "firebase/firestore";
 import {
   ref as reference,
   uploadBytes,
@@ -23,8 +23,6 @@ export const EditProfile = (props) => {
   const [name, setName] = useState(oldName);
   const [nameStyle, setNameStyle] = useState({});
   const [nameErrorMessage, setNameErrorMessage] = useState("");
-
-  const [location, setLocation] = useState("");
 
   const [oldImageURI, setOldImageURI] = useState(auth?.currentUser?.photoURL);
   const [imageURI, setImageURI] = useState(oldImageURI);
@@ -82,11 +80,10 @@ export const EditProfile = (props) => {
       displayName: name,
       photoURL: photoUrl,
     })
-    await setDoc(doc(firestore, "users", `${user.uid}`), {
+    await updateDoc(doc(firestore, "users", `${user.uid}`), {
       email: user.email,
       displayName: name,
       photoURL: photoUrl,
-      location: location,
     });
     DeviceEventEmitter.emit("event.edited", "edited");
     setIsLoading(false);

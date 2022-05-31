@@ -12,7 +12,6 @@ export const Profile = (props) => {
 
   const [displayName, setDisplayName] = useState(null);
   const [imageURI, setImageURI] = useState(null);
-  const [location, setLocation] = useState("");
 
   useEffect(()=>{
     setDisplayName(auth.currentUser.displayName);

@@ -7,10 +7,9 @@ import { CustomDrawer } from "./CustomDrawer";
 import { ProfileScreen } from "../profile/ProfileScreen";
 import { ChatScreen } from "../volunteering/Chat";
 import { Volunteering } from "../volunteering/VolunteeringStack";
+import { LocationStack } from "../location/LocationStack";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import { SignInScreen } from "../../auth/SignIn";
 
 const Drawer = createDrawerNavigator();
 
@@ -48,6 +47,15 @@ export const DrawerScreen = () => {
         <Drawer.Screen
           name="Volunteering"
           component={Volunteering}
+          options={{
+            drawerIcon: ({color}) => (
+              <Ionicons name="home-outline" size={22} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Місцезнаходження"
+          component={LocationStack}
           options={{
             drawerIcon: ({color}) => (
               <Ionicons name="home-outline" size={22} color={color} />
