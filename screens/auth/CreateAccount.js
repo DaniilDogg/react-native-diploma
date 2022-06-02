@@ -33,7 +33,7 @@ export const CreateAccountScreen = ({ navigation }) => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
+        alert("Необхідно надати доступ до зображень.");
         return;
       }
     }
@@ -52,7 +52,7 @@ export const CreateAccountScreen = ({ navigation }) => {
 
   const createAccount = async () => {
     if (name == "") {
-      setNameErrorMessage("Enter your name.");
+      setNameErrorMessage("Введіть ваше ім'я.");
       setNameStyle(authStyle.errorContainer);
       return;
     }
@@ -69,7 +69,7 @@ export const CreateAccountScreen = ({ navigation }) => {
         photoUrl = await getDownloadURL(imageRef);
       } catch (error) {
         console.log(error);
-        alert("Can't upload avatar.");
+        alert("Не вдалося завантажити фото.");
       }
     }
     updateProfile(user, {

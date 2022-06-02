@@ -22,7 +22,6 @@ export const Volunteering = (props) => {
         name="TaskList"
         component={TaskList}
         options={(props) => ({
-          title: props.route.params.text,
           header: () => (
             <View
               style={{
@@ -50,9 +49,9 @@ export const Volunteering = (props) => {
                   borderRadius: 0,
                 }}
               />
-              <View style={{ alignItems: "center", marginLeft: 20 }}>
-                <Text style={{ fontSize: 19, fontWeight: "normal" }}>
-                  {props.route.params.volunteering_type}
+              <View style={{ alignItems: "center", marginLeft: 19 }}>
+                <Text style={{ fontSize: 18, fontWeight: "normal" }}>
+                  {props.route.params.title}
                 </Text>
               </View>
             </View>

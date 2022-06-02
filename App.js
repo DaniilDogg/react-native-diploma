@@ -66,6 +66,7 @@ export default function App() {
             name="Sign In"
             component={SignInScreen}
             options={{
+              title: 'Вхід',
               transitionSpec: {
                 open: config,
                 close: config,
@@ -76,6 +77,7 @@ export default function App() {
             name="Sign Up"
             component={SignUpScreen}
             options={{
+              title: 'Реєстрація',
               transitionSpec: {
                 open: config,
                 close: config,

@@ -38,18 +38,18 @@ export const CustomDrawer = (props) => {
 
   const showConfirmDialog = () => {
     return Alert.alert(
-      "Sign out?",
-      "Are you sure you want to sign out of your account?",
+      "Вийти з облікового запису?",
+      "Ви впевнені, що хочете вийти зі свого облікового запису?",
       [
         // The "Yes" button
         {
-          text: "Yes",
+          text: "Так",
           onPress: singOutUser,
         },
         // The "No" button
         // Does nothing but dismiss the dialog when tapped
         {
-          text: "No",
+          text: "Ні",
         },
       ]
     );
@@ -105,7 +105,7 @@ export const CustomDrawer = (props) => {
           >
             <Ionicons name="log-out-outline" size={26} color={"#000"} />
             <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
-              Sign out
+              Вихід
             </Text>
           </View>
         </TouchableHighlight>

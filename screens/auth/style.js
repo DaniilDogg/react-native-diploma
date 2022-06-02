@@ -26,7 +26,7 @@ export const authStyle = StyleSheet.create({
     },
     input:{
       marginVertical: 3,
-      borderWidth: 2,
+      borderWidth: 0,
       borderColor: '#fff',
     },
     button: {
@@ -36,15 +36,17 @@ export const authStyle = StyleSheet.create({
       borderColor: '#FFA046',
       borderWidth: 1,
       borderRadius: 10,
-      marginVertical: 7,
+      marginTop: 15,
       height: 60,
     },
     secondButton: {
       backgroundColor: '#fff',
+      marginTop: 20,
+      marginBottom: 20
     },
     errorContainer:{
       borderColor: 'red',
-      borderWidth: 2,
+      borderWidth: 0,
     },
     errorText:{
       fontSize: 16

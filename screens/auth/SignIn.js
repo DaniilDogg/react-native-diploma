@@ -25,12 +25,12 @@ export const SignInScreen = ({ navigation }) => {
     setErrorMessage("");
     let er = false;
     if (email == "") {
-      setEmailErrorMessage("Email cannot be empty.");
+      setEmailErrorMessage("Введіть свою електронну адресу.");
       setEmailStyle(authStyle.errorContainer);
       er = true;
     }
     if (password == "") {
-      setPasswordErrorMessage("Password cannot be empty.");
+      setPasswordErrorMessage("Введіть пароль.");
       setPasswordStyle(authStyle.errorContainer);
       er = true;
     }
@@ -51,7 +51,7 @@ export const SignInScreen = ({ navigation }) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setErrorMessage("That email and password combination is incorrect.");
+        setErrorMessage("Ця комбінація електронної пошти та пароля неправильна.");
       })
       .finally(() => setIsLoading(false));
   };
@@ -61,7 +61,7 @@ export const SignInScreen = ({ navigation }) => {
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       if (reg.test(email) === false) {
         inputs[0] = false;
-        setEmailErrorMessage("Email is not Correct.");
+        setEmailErrorMessage("Неправильна електронна адреса.");
         setEmailStyle(authStyle.errorContainer);
         return true;
       }
@@ -83,8 +83,8 @@ export const SignInScreen = ({ navigation }) => {
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={authStyle.main_container}>
           <View style={authStyle.view}>
-            <Text h3 style={authStyle.pageTitle}>
-              Sign In
+            <Text h2 style={authStyle.pageTitle}>
+              Вхід
             </Text>
             <Text style={authStyle.singInErrorContainer}>{errorMessage}</Text>
             <Input
@@ -110,8 +110,8 @@ export const SignInScreen = ({ navigation }) => {
             <Input
               containerStyle={[authStyle.input, passwordStyle]}
               labelStyle={[authStyle.lable]}
-              placeholder="Password"
-              label="Password"
+              placeholder="Пароль"
+              label="Пароль"
               leftIcon={{ type: "feather", name: "lock" }}
               value={password}
               onChangeText={(text) => {
@@ -129,7 +129,7 @@ export const SignInScreen = ({ navigation }) => {
             {isLoading ? (
               <View>
                 <Button
-                  title="Sign In"
+                  title="Вхід"
                   buttonStyle={[authStyle.button]}
                   titleStyle={[authStyle.buttonTitle]}
                   onPress={signInUser}
@@ -141,7 +141,7 @@ export const SignInScreen = ({ navigation }) => {
                 />
                 <Button
                   buttonStyle={[authStyle.button, authStyle.secondButton]}
-                  title="Sign Up"
+                  title="Реєстрація"
                   titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
                   onPress={() => navigation.navigate("Sign Up")}
                   disabled
@@ -151,14 +151,14 @@ export const SignInScreen = ({ navigation }) => {
             ) : (
               <View>
                 <Button
-                  title="Sign In"
+                  title="Вхід"
                   buttonStyle={[authStyle.button]}
                   titleStyle={[authStyle.buttonTitle]}
                   onPress={signInUser}
                 />
                 <Button
                   buttonStyle={[authStyle.button, authStyle.secondButton]}
-                  title="Sign Up"
+                  title="Реєстрація"
                   titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
                   onPress={() => navigation.navigate("Sign Up")}
                 />

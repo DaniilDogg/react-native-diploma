@@ -14,22 +14,19 @@ import { auth, storage, firestore } from "../../../firebase/firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 //
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { async } from "@firebase/util";
 
 export const LocationFilterScreen = (props) => {
   const [userId, setUserId] = useState(auth?.currentUser?.uid);
   const [location, setLocation] = useState(null);
   const [notLoaded, setNotLoaded] = useState(true);
 
-  const getLocation = async () => {
-    const docRef = doc(firestore, "users", userId);
-    const userData = await getDoc(docRef);
-    setLocation(userData.data().location.replace(", ", ",\n"));
-    setNotLoaded(false);
-  };
-  
-  useLayoutEffect(async () => {
-    getLocation();
+  useLayoutEffect(() => {
+      (async ()=>{
+        const docRef = doc(firestore, "users", userId);
+        const userData = await getDoc(docRef);
+        setLocation(userData.data().location.replace(", ", ",\n"));
+        setNotLoaded(false);
+      })()
   }, [props.route.params.location]);
 
   if (userId == null || notLoaded) return null;

@@ -17,7 +17,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 export const LocationList = (props) => {
   const [userId, setUserId] = useState(auth?.currentUser?.uid);
+
   const locations = require("./location.json");
+
   const regions =
     props.route.params.region == "" ? "regions" : props.route.params.region;
   const data = locations[regions];
@@ -37,6 +39,7 @@ export const LocationList = (props) => {
           await updateDoc(docRef, {
             location: newLocation,
           });
+          DeviceEventEmitter.emit("event.location", newLocation);
           props.navigation.replace("LocationFilterScreen", {location: newLocation});
         };
 
@@ -73,7 +76,7 @@ export const LocationList = (props) => {
         >
           {item}
         </Text>
-        {item != "Уся Україна" && (
+        {(item != "Уся Україна" && props?.route?.params?.region == "") && (
           <Ionicons
             style={{ position: "absolute", right: 20, top: "40%" }}
             name="chevron-forward-outline"
@@ -84,6 +87,8 @@ export const LocationList = (props) => {
       </View>
     </TouchableHighlight>
   );
+
+  if (userId == null) return null;
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>

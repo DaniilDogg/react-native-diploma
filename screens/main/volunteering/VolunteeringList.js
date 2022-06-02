@@ -29,6 +29,7 @@ export const VolunteeringList = (props) => {
         {
           img: doc.data().iconURL,
           title: doc.data().title,
+          key: doc.data().key,
         }
       ))
       setTasks(data);
@@ -56,7 +57,7 @@ export const VolunteeringList = (props) => {
           setTimeout(()=> {
             notPressed = true;
           }, 500)
-          props.navigation.navigate("TaskList", { volunteering_type: item.title });
+          props.navigation.navigate("TaskList", { key: item.key, title: item.title });
         }
       }}
     >

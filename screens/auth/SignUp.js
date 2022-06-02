@@ -31,22 +31,22 @@ export const SignUpScreen = ({ route, navigation }) => {
     if (!(inputs[0] && inputs[1] && inputs[2] && inputs[3])) return;
     let er = false;
     if (code == "") {
-      setCodeErrorMessage("Invitation code cannot be empty.");
+      setCodeErrorMessage("Введіть код запрошення.");
       setCodeStyle(authStyle.errorContainer);
       er = true;
     }
     if (email == "") {
-      setEmailErrorMessage("Email cannot be empty.");
+      setEmailErrorMessage("Введіть свою електронну адресу.");
       setEmailStyle(authStyle.errorContainer);
       er = true;
     }
     if (password == "") {
-      setPasswordErrorMessage("Password cannot be empty.");
+      setPasswordErrorMessage("Введіть пароль.");
       setPasswordStyle(authStyle.errorContainer);
       er = true;
     }
     if (passwordConfirm == "") {
-      setPasswordConfirmErrorMessage("Password confirmation cannot be empty.");
+      setPasswordConfirmErrorMessage("Введіть підтвердження пароля.");
       setPasswordConfirmStyle(authStyle.errorContainer);
       er = true;
     }
@@ -70,7 +70,7 @@ export const SignUpScreen = ({ route, navigation }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorMessage == "Firebase: Error (auth/email-already-in-use).") {
-          setEmailErrorMessage("This email is already in use.");
+          setEmailErrorMessage("Ця електронна адреса вже використовується.");
           setEmailStyle(authStyle.errorContainer);
         }
       })
@@ -79,7 +79,7 @@ export const SignUpScreen = ({ route, navigation }) => {
 
   const checkCode = () => {
     if (code != "") {
-      if (code != "Glory_to_Ukraine!") {
+      if (code != "Code") {йцу
         inputs[0] = false;
         setCodeErrorMessage("Неправильный код");
         setCodeStyle(authStyle.errorContainer);
@@ -96,7 +96,7 @@ export const SignUpScreen = ({ route, navigation }) => {
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       if (reg.test(email) === false) {
         inputs[1] = false;
-        setEmailErrorMessage("Email is not Correct.");
+        setEmailErrorMessage("Неправильна електронна адреса.");
         setEmailStyle(authStyle.errorContainer);
         return;
       }
@@ -111,14 +111,14 @@ export const SignUpScreen = ({ route, navigation }) => {
       inputs[2] = false;
       if (password.length < 8) {
         setPasswordErrorMessage(
-          "The password must be at least 8 characters long."
+          "Пароль має містити не менше 8 символів."
         );
         setPasswordStyle(authStyle.errorContainer);
         return;
       }
       if ((password.match(/[A-Za-z_]/g) || []).length < 3) {
         setPasswordErrorMessage(
-          "The password must contain at least three letters."
+          "Пароль повинен містити не менше трьох літер."
         );
         setPasswordStyle(authStyle.errorContainer);
         return;
@@ -134,7 +134,7 @@ export const SignUpScreen = ({ route, navigation }) => {
     if (passwordConfirm != "") {
       if (passwordConfirm != password) {
         inputs[3] = false;
-        setPasswordConfirmErrorMessage("Password does not match.");
+        setPasswordConfirmErrorMessage("Паролі не співпадають.");
         setPasswordConfirmStyle(authStyle.errorContainer);
         return;
       }
@@ -149,13 +149,13 @@ export const SignUpScreen = ({ route, navigation }) => {
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={authStyle.main_container}>
           <View style={authStyle.view}>
-            <Text h3 style={authStyle.pageTitle}>
-              Sing Up
+            <Text h2 style={authStyle.pageTitle}>
+              Реєстрація
             </Text>
             <Input
               labelStyle={[authStyle.lable]}
-              placeholder="Your invitation code"
-              label="Invitation code"
+              placeholder="Ваш код запрошення"
+              label="Код запрошення"
               leftIcon={{ type: "ionicon", name: "key-outline" }}
               value={code}
               onChangeText={(text) => setCode(text.replace(/\s/g, ""))}
@@ -186,8 +186,8 @@ export const SignUpScreen = ({ route, navigation }) => {
 
             <Input
               labelStyle={[authStyle.lable]}
-              placeholder="Password"
-              label="Password"
+              placeholder="Пароль"
+              label="Пароль"
               leftIcon={{ type: "feather", name: "lock" }}
               value={password}
               onChangeText={(text) => setPassword(text.replace(/\s/g, ""))}
@@ -200,8 +200,8 @@ export const SignUpScreen = ({ route, navigation }) => {
             />
             <Input
               labelStyle={[authStyle.lable]}
-              placeholder="Confirm the password"
-              label="Password"
+              placeholder="Підтвердіть пароль"
+              label="Пароль"
               leftIcon={{ type: "feather", name: "lock" }}
               value={passwordConfirm}
               onChangeText={(text) =>
@@ -217,7 +217,7 @@ export const SignUpScreen = ({ route, navigation }) => {
             {isLoading ? (
               <View>
                 <Button
-                  title="Sign Up"
+                  title="Реєстрація"
                   buttonStyle={[authStyle.button]}
                   titleStyle={[authStyle.buttonTitle]}
                   onPress={signUpUser}
@@ -229,7 +229,7 @@ export const SignUpScreen = ({ route, navigation }) => {
                 />
                 <Button
                   buttonStyle={[authStyle.button, authStyle.secondButton]}
-                  title="Sign In"
+                  title="Вхід"
                   titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
                   onPress={() => navigation.navigate("Sign In")}
                   disabled
@@ -239,14 +239,14 @@ export const SignUpScreen = ({ route, navigation }) => {
             ) : (
               <View>
                 <Button
-                  title="Sign Up"
+                  title="Реєстрація"
                   buttonStyle={[authStyle.button]}
                   titleStyle={[authStyle.buttonTitle]}
                   onPress={signUpUser}
                 />
                 <Button
                   buttonStyle={[authStyle.button, authStyle.secondButton]}
-                  title="Sign In"
+                  title="Вхід"
                   titleStyle={[authStyle.buttonTitle, { color: "#FFA046" }]}
                   onPress={() => navigation.navigate("Sign In")}
                 />

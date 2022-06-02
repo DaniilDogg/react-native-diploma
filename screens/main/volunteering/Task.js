@@ -16,7 +16,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 
 export const Task = (props) => {
-  const [title, setTitle] = useState(props.route.params.title);
+  const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
 
@@ -24,7 +24,7 @@ export const Task = (props) => {
     (async () => {
       const docRef = doc(
         firestore,
-        `/VolunteeringTasks/${props.route.params.volunteering_type}/tasks/${props.route.params.task_id}`
+        `/VolunteeringTasks/${props.route.params.key}/tasks/${props.route.params.task_id}`
       );
       const docSnap = await getDoc(docRef);
       setTitle(docSnap.data().title);
@@ -48,28 +48,6 @@ export const Task = (props) => {
           {description}
           {"\n"}
           {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description}
-          {"\n"}
-          {description} ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫ
         </Text>
       </ScrollView>
       <Button
@@ -78,7 +56,7 @@ export const Task = (props) => {
         titleStyle={[style.buttonTitle]}
         onPress={() => {
           props.navigation.navigate("Chat", {
-            volunteering_type: props.route.params.volunteering_type,
+            key: props.route.params.key,
             task_id: props.route.params.task_id,
           });
         }}

@@ -48,30 +48,35 @@ export const ChatScreen = (props) => {
   const users_data = new Map();
 
   useLayoutEffect(() => {
-    const collectionRef = collection(firestore, `/chats/${props.route.params.volunteering_type}/${props.route.params.task_id}`);
+    const collectionRef = collection(
+      firestore,
+      `/chats/${props.route.params.key}/${props.route.params.task_id}`
+    );
     const q = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      const msgs = await Promise.all(querySnapshot.docs.map(async (document) => {
-        
-        const message = {
-          _id: document.data()._id,
-          createdAt: document.data().createdAt.toDate(),
-          text: document.data().text,
-          user: document.data().user,
-        };
+      const msgs = await Promise.all(
+        querySnapshot.docs.map(async (document) => {
+          const message = {
+            _id: document.data()._id,
+            createdAt: document.data().createdAt.toDate(),
+            text: document.data().text,
+            user: document.data().user,
+          };
 
-        if (!users_data.has(message.user._id)) {
-          const docRef = doc(firestore, 'users', message.user._id)
-          const data = await getDoc(docRef);
-          users_data.set(message.user._id, data.data());
-        }
-        
-        message.user.name = users_data.get(message.user._id).displayName;
-        message.user.avatar = users_data.get(message.user._id).photoURL;
+          if (!users_data.has(message.user._id)) {
+            const docRef = doc(firestore, "users", message.user._id);
+            const data = await getDoc(docRef);
+            users_data.set(message.user._id, data.data());
+          }
 
-        return message;
-      }))
+          message.user.name = users_data.get(message.user._id).displayName;
+          message.user.avatar = users_data.get(message.user._id).photoURL;
+          message.user.admin = users_data.get(message.user._id).admin;
+
+          return message;
+        })
+      );
       setMessages(msgs);
     });
     return unsubscribe;
@@ -79,12 +84,18 @@ export const ChatScreen = (props) => {
 
   const onSend = useCallback((messages = []) => {
     const { _id, createdAt, text, user } = messages[0];
-    addDoc(collection(firestore, `/chats/${props.route.params.volunteering_type}/${props.route.params.task_id}`), {
-      _id,
-      createdAt,
-      text,
-      user,
-    });
+    addDoc(
+      collection(
+        firestore,
+        `/chats/${props.route.params.key}/${props.route.params.task_id}`
+      ),
+      {
+        _id,
+        createdAt,
+        text,
+        user,
+      }
+    );
   }, []);
 
   const CustomInputToolbar = (props) => {
@@ -150,7 +161,7 @@ export const ChatScreen = (props) => {
       {...props}
       containerStyle={{
         left: { backgroundColor: massageContainerColor },
-        right:{ backgroundColor: selfMassageContainerColor },
+        right: { backgroundColor: selfMassageContainerColor },
       }}
       /*
       textStyle={{
@@ -167,6 +178,7 @@ export const ChatScreen = (props) => {
   );
 
   const CustomBubble = (props) => {
+    const isAdmin = props.currentMessage.user.admin;
     const checkUser = props.currentMessage.user._id != props.user._id;
     const checkMassage =
       props?.previousMessage?.user?._id != props.currentMessage.user._id;
@@ -200,10 +212,14 @@ export const ChatScreen = (props) => {
 
     const viewStyle = StyleSheet.create({
       all: {
-        minWidth: 80,
+        minWidth: 75,
         maxWidth: maxWidth,
         borderRadius: 10,
         borderTopRightRadius: 10,
+        alignItems: "flex-end",
+      },
+      admin:{
+        minWidth: 115,
       },
       left: {
         padding: 0,
@@ -230,6 +246,7 @@ export const ChatScreen = (props) => {
         style={[
           viewStyle.all,
           checkUser ? viewStyle.left : {},
+          isAdmin ? viewStyle.admin : {},
           checkNextMassage
             ? { borderBottomLeftRadius: 0 }
             : { marginBottom: 15 },
@@ -251,7 +268,11 @@ export const ChatScreen = (props) => {
               borderTopRightRadius: 10,
               overflow: "hidden",
             },
-            right: {overflow: "hidden", backgroundColor: selfMassageContainerColor},
+            right: {
+              width: "100%",
+              overflow: "hidden",
+              backgroundColor: selfMassageContainerColor,
+            },
           }}
           bottomContainerStyle={{
             left: { alignSelf: "flex-end", display: "none" },
@@ -262,23 +283,38 @@ export const ChatScreen = (props) => {
             right: {},
           }}
           containerToPreviousStyle={{
-            left: { borderTopRightRadius: 10 },
+            left: { borderTopRightRadius: 10, borderTopLeftRadius: 0 },
             right: {},
           }}
         ></Bubble>
         {checkUser && (
-          <Text
-            style={{
-              color: "#000",
-              fontSize: 11,
-              textAlign: "right",
-              width: "100%",
-              paddingRight: 7,
-              marginBottom: 2,
-            }}
-          >
-            {formatAMPM(props.currentMessage.createdAt)}
-          </Text>
+          <View style={{ flex: 1, width: "auto", flexDirection:'row', alignItems: 'center', paddingBottom: 3 }}>
+            {isAdmin && (
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 12,
+                  textAlign: "left",
+                  paddingLeft: 7,
+                  paddingRight: 7,
+                }}
+              >
+                Admin
+              </Text>
+            )}
+            <Text
+              style={{
+                flex: 1,
+                color: "#000",
+                fontSize: 11,
+                minWidth: 60,
+                textAlign: "right",                
+                paddingRight: 7,
+              }}
+            >
+              {formatAMPM(props.currentMessage.createdAt)}
+            </Text>
+          </View>
         )}
       </View>
     );
