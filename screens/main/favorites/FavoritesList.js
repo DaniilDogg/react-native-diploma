@@ -7,7 +7,7 @@ import {
   DeviceEventEmitter,
 } from "react-native";
 import { Avatar, Icon, Text } from "@rneui/base";
-import { Task } from "./Task";
+import { Task } from "../task/Task";
 import { auth, firestore } from "../../../firebase/firebase-config";
 import {
   collection,
@@ -22,50 +22,39 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-export const TaskList = (props) => {
+export const FavoritesList = (props) => {
   const [userId, setUserId] = useState(auth?.currentUser?.uid);
   if (userId == null) return null;
-  const [location, setLocation] = useState(null);
+
+  const [tasksId, setTasksId] = useState(null);
   const [tasks, setTasks] = useState(null);
   let notLoaded = true;
 
-  const getLocation = async () => {
+  useEffect(() => {    
     const docRef = doc(firestore, "users", userId);
-    const userData = await getDoc(docRef);
-    setLocation(userData.data().location);
-  };
+    const unsubscribe = onSnapshot(docRef, async (doc) => {
+      setTasksId(doc.data().followedTasks);
+    });
 
-  useEffect(() => {
-    const subscription = DeviceEventEmitter.addListener(
-      "event.location",
-      async (eventData) => {
-        setLocation(eventData);
-      }
-    );
-    return () => {
-      subscription.remove();
-      DeviceEventEmitter.removeAllListeners("event.location");
-    };
+    return unsubscribe;
   }, []);
-
+  return null
+}/*
   useLayoutEffect(() => {
-    if (location == null) {
-      getLocation();
-      return;
-    }
+    if (tasksId == null) return null;
+    alert(tasksId)
+    return
     const collectionRef = collection(
       firestore,
       `/VolunteeringTasks/${props.route.params.key}/tasks`
     );
     let q = null;
-    if(location == 'Уся Україна'){
-      q = query(collectionRef)
-    }
-    else if (location.includes(', ')){
-      q = query(collectionRef, where("location", "==", location));      
-    }
-    else{
-      q = query(collectionRef, where("region", "==", location))
+    if (location == "Уся Україна") {
+      q = query(collectionRef);
+    } else if (location.includes(", ")) {
+      q = query(collectionRef, where("location", "==", location));
+    } else {
+      q = query(collectionRef, where("region", "==", location));
     }
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const tasks = await Promise.all(
@@ -93,7 +82,10 @@ export const TaskList = (props) => {
     });
 
     return unsubscribe;
-  }, [location]);
+  }, [tasksId]);
+
+  return null;
+
 
   let notPressed = true;
 
@@ -144,14 +136,13 @@ export const TaskList = (props) => {
           paddingVertical: 15,
         }}
       >
-        <View style={{ flex: 1, width: "100%"}}>
-          <Text
-            numberOfLines={1}
-            style={{ fontSize: 17, fontWeight: "bold" }}
-          >
+        <View style={{ flex: 1, width: "100%" }}>
+          <Text numberOfLines={1} style={{ fontSize: 17, fontWeight: "bold" }}>
             {item.title}
           </Text>
-          <Text style={{ position: "absolute", top: 0, right: 0, color: '#707070' }}>
+          <Text
+            style={{ position: "absolute", top: 0, right: 0, color: "#707070" }}
+          >
             {formatDate(item.createdAt.toDate(), "dd:MM:yy")}
           </Text>
         </View>
@@ -184,3 +175,4 @@ export const TaskList = (props) => {
     </View>
   );
 };
+*/

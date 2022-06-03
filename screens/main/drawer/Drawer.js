@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Icon } from "@rneui/base";
 
 import { CustomDrawer } from "./CustomDrawer";
 
 import { ProfileScreen } from "../profile/ProfileScreen";
-import { ChatScreen } from "../volunteering/Chat";
+import { ChatScreen } from "../task/Chat";
 import { Volunteering } from "../volunteering/VolunteeringStack";
 import { LocationStack } from "../location/LocationStack";
+import { FavoritesList } from "../favorites/FavoritesList";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -41,7 +43,7 @@ export const DrawerScreen = () => {
           options={{
             title: "Профіль",
             drawerIcon: ({ color }) => (
-              <Ionicons name="person-outline" size={22} color={color} />
+              <Ionicons name="person-outline" size={23} color={color} />
             ),
           }}
         />
@@ -51,7 +53,12 @@ export const DrawerScreen = () => {
           options={{
             title: "Волонтерство",
             drawerIcon: ({ color }) => (
-              <Ionicons name="home-outline" size={22} color={color} />
+              <Icon
+              name='hand-heart-outline'
+              type='material-community'
+              color={color}
+              size={23}
+            />
             ),
           }}
         />
@@ -61,17 +68,22 @@ export const DrawerScreen = () => {
           options={{
             title: "Фільтр",
             drawerIcon: ({ color }) => (
-              <Ionicons name="home-outline" size={22} color={color} />
+              <Icon
+              name='filter'
+              type='octicon'
+              color={color}
+              size={23}
+            />
             ),
           }}
         />
         <Drawer.Screen
           name="Favorites"
-          component={LocationStack}
+          component={FavoritesList}
           options={{
             title: "Вибране",
             drawerIcon: ({ color }) => (
-              <Ionicons name="home-outline" size={22} color={color} />
+              <Ionicons name="bookmark-outline" size={23} color={color} />
             ),
           }}
         />

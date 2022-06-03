@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignInScreen } from "./screens/auth/SignIn";
 import { SignUpScreen } from "./screens/auth/SignUp";
 import { CreateAccountScreen } from "./screens/auth/CreateAccount";
-import { TaskStack } from "./screens/main/volunteering/TaskStack";
+import { TaskStack } from "./screens/main/task/TaskStack";
 
 import { DrawerScreen } from "./screens/main/drawer/Drawer";
 

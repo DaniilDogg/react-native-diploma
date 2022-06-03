@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TouchableHighlight, View, Alert, DeviceEventEmitter } from "react-native";
+import {
+  StyleSheet,
+  TouchableHighlight,
+  View,
+  Alert,
+  DeviceEventEmitter,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import {
@@ -23,17 +29,20 @@ export const CustomDrawer = (props) => {
     setImageURI(auth.currentUser.photoURL);
     setDisplayName(auth.currentUser.displayName);
 
-    const subscription = DeviceEventEmitter.addListener("event.edited", async (eventData) => {
-      setTimeout(()=>{
-        setImageURI(auth.currentUser.photoURL);
-        setDisplayName(auth.currentUser.displayName);
-      }, 500)
-    })
+    const subscription = DeviceEventEmitter.addListener(
+      "event.edited",
+      async (eventData) => {
+        setTimeout(() => {
+          setImageURI(auth.currentUser.photoURL);
+          setDisplayName(auth.currentUser.displayName);
+        }, 500);
+      }
+    );
 
     return () => {
-      subscription.remove()
-      DeviceEventEmitter.removeAllListeners('event.edited');
-    }
+      subscription.remove();
+      DeviceEventEmitter.removeAllListeners("event.edited");
+    };
   }, []);
 
   const showConfirmDialog = () => {
@@ -99,11 +108,15 @@ export const CustomDrawer = (props) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              paddingHorizontal: 7,
+              paddingHorizontal: 8,
               paddingVertical: 10,
             }}
           >
-            <Ionicons name="log-out-outline" size={26} color={"#000"} />
+            {
+              <Icon name="logout" type="material" color={'#000'} size={23} />
+              //<Ionicons name="bookmark-outline" size={23} color={'#000'} />
+              //<Ionicons name="log-out-outline" size={23} color={"#000"} />
+            }
             <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
               Вихід
             </Text>

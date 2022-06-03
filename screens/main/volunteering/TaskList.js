@@ -7,7 +7,7 @@ import {
   DeviceEventEmitter,
 } from "react-native";
 import { Avatar, Icon, Text } from "@rneui/base";
-import { Task } from "./Task";
+import { Task } from "../task/Task";
 import { auth, firestore } from "../../../firebase/firebase-config";
 import {
   collection,
