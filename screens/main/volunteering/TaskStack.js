@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, DeviceEventEmitter } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Icon, Text, Button, Tooltip } from "@rneui/base";
 
 import { Task } from "./Task";
@@ -37,49 +37,12 @@ export const TaskStack = (props) => {
         component={Task}
         options={(props) => ({
           title: props.route.params.title,
-          headerRight: () => {
-            const [added, setAdded] = useState(null)
-            useEffect(()=>{
-              const subscription = DeviceEventEmitter.addListener(
-                "event.taskAdded",
-                async (eventData) => {
-                  setLocation(eventData);
-                }
-              );
-              return () => {
-                subscription.remove();
-                DeviceEventEmitter.removeAllListeners("event.location");
-              };
-            }, [])
-
-            if(added == null) return
-            return (
-              <Button
-                icon={
-                  //<ion-icon name=></ion-icon>
-                  <Icon
-                    name={added ? "remove-circle-outline" : "add-circle-outline"}
-                    type="ionicon"
-                    color="#000"
-                    size={32}
-                  />
-                }
-                onPress={() => props.navigation.goBack()}
-                buttonStyle={{
-                  backgroundColor: "#FFA046",
-                  paddingLeft: 12,
-                  paddingRight: 12,
-                  height: "100%",
-                  borderRadius: 0,
-                }}
-              />
-            );
-          },
         })}
         initialParams={{
           title: props.route.params.title,
           key: props.route.params.key,
           task_id: props.route.params.task_id,
+          userId: props.route.params.userId,
         }}
       />
       <Stack.Screen name="Chat" component={ChatScreen} />

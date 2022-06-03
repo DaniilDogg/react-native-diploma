@@ -66,10 +66,10 @@ export const DrawerScreen = () => {
           }}
         />
         <Drawer.Screen
-          name="Tracking"
+          name="Favorites"
           component={LocationStack}
           options={{
-            title: "Відстежувальні",
+            title: "Вибране",
             drawerIcon: ({ color }) => (
               <Ionicons name="home-outline" size={22} color={color} />
             ),

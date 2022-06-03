@@ -58,22 +58,20 @@ export const LocationFilterScreen = (props) => {
           });
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Ionicons style={{marginLeft: 20}} name="location-outline" size={30} color={"#000"} />
+        <View style={{ flexDirection: "row", alignItems: "center", paddingRight: 10 }}>
+        <Ionicons style={{marginHorizontal: 15}} name="location-outline" size={33} color={"#000"} />          
           <View
             style={{
               flexDirection: "column",
               alignItems: "center",
-              paddingHorizontal: 7,
-              paddingVertical: 10,
+              paddingVertical: 15,              
             }}
           >
             <Text
               style={{
                 fontSize: 20,
                 fontWeight: "normal",
-                marginLeft: 15,
-                marginVertical: 5,
+                marginEnd: 50,  
               }}
             >
               {location}

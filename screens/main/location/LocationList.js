@@ -36,6 +36,9 @@ export const LocationList = (props) => {
       onPress={async () => {
         const update = async (newLocation) => {
           const docRef = doc(firestore, "users", userId);
+          if(newLocation.includes(', Уся ')){
+            newLocation = newLocation.split(', ')[1]
+          }
           await updateDoc(docRef, {
             location: newLocation,
           });

@@ -24,8 +24,7 @@ export const CreateAccountScreen = ({ navigation }) => {
   const [name, setName] = useState(auth?.currentUser?.displayName);
   const [nameStyle, setNameStyle] = useState({});
   const [nameErrorMessage, setNameErrorMessage] = useState("");
-
-  const [location, setLocation] = useState("");
+  
   const [imageURI, setImageURI] = useState(auth?.currentUser?.photoURL);
 
   const pickImage = async () => {
@@ -77,10 +76,12 @@ export const CreateAccountScreen = ({ navigation }) => {
       photoURL: photoUrl,
     });
     await setDoc(doc(firestore, "users", `${user.uid}`), {
-      email: user.email,
+      admin: false,      
       displayName: name,
+      email: user.email,
+      followedTasks: [],
+      location: 'Уся Україна',
       photoURL: photoUrl,
-      location: location,
     });
     setIsLoading(false);
     navigation.replace("DrawerScreen");
@@ -138,18 +139,6 @@ export const CreateAccountScreen = ({ navigation }) => {
               renderErrorMessage
               errorStyle={authStyle.errorText}
               errorMessage={nameErrorMessage}
-            />
-            <Input
-              containerStyle={([authStyle.input], { display: "none" })}
-              labelStyle={[authStyle.lable]}
-              placeholder="Your location"
-              label="Location"
-              leftIcon={{
-                type: "material-community",
-                name: "home-city-outline",
-              }}
-              value={location}
-              onChangeText={(text) => setLocation(text)}
             />
             {isLoading ? (
               <Button
