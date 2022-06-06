@@ -98,22 +98,31 @@ export const ChatScreen = (props) => {
     );
   }, []);
 
+
+  const [inputLenght, setInputLenght] = useState(0)
+
   const CustomInputToolbar = (props) => {
+
     const _onSend = (props) => {
       if (props.text.trim() == "") {
-        props.text = "";
         return;
       }
       props.onSend({ text: props.text.trim() }, true);
     };
+
     const SendButton = (props) => {
       if (props.text.trim() != "") {
         return (
-          <Button
-            buttonStyle={[styles.sendButton]}
-            icon={<Icon type="ionico" name="send" size={35} color="#FF8F19" />}
-            onPress={() => _onSend(props)}
-          />
+          <View style={{marginRight: 1}}>
+            <Button
+              buttonStyle={[styles.sendButton]}
+              title = {'10/10'}
+              icon={<Icon type="ionico" name="send" size={35} color="#FF8F19" />}
+              onPress={() => _onSend(props)}
+            >
+              <Text style={{position:'absolute', bottom: 0, left: 30, fontSize:12, color: inputLenght >= 255 ? 'red' : 'black'}}>{inputLenght}/255</Text>
+            </Button>            
+          </View>
         );
       }
     };
@@ -130,19 +139,29 @@ export const ChatScreen = (props) => {
           alignItems: "stretch",
         }}
         renderSend={SendButton}
+        renderComposer={CustomComposer}
       />
     );
   };
 
-  const CustomComposer = (props) => (
-    <Composer
-      {...props}
-      textInputStyle={{
-        textAlign: "justify",
-        textAlignVertical: "center",
-      }}
-    />
-  );
+  const CustomComposer = (props) => {
+    return (
+      <Composer
+        {...props}
+        textInputStyle={{
+          textAlign: "justify",
+          textAlignVertical: "center",
+        }}
+        onTextChanged={(text)=>{
+          if(text.length >= 256){
+            return
+          }
+          props.onTextChanged(text)
+          setInputLenght(text.length)
+        }}
+      />
+    )
+  }
 
   const CustomMessage = (props) => (
     <Message
@@ -350,8 +369,6 @@ export const ChatScreen = (props) => {
       renderAvatarOnTop={true}
       user={{
         _id: auth?.currentUser?.uid,
-        name: auth?.currentUser?.displayName,
-        avatar: auth?.currentUser?.photoURL,
       }}
       listViewProps={{
         style: {

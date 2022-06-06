@@ -143,18 +143,6 @@ export const EditProfile = (props) => {
               errorStyle={styles.errorText}
               errorMessage={nameErrorMessage}
             />
-            <Input
-              containerStyle={([styles.input], { display: "none" })}
-              labelStyle={[styles.lable]}
-              placeholder="Your location"
-              label="Location"
-              leftIcon={{
-                type: "material-community",
-                name: "home-city-outline",
-              }}
-              value={location}
-              onChangeText={(text) => setLocation(text)}
-            />
             {isLoading ? (
               <Button
                 title="Edit"

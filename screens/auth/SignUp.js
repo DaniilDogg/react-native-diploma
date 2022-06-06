@@ -79,7 +79,7 @@ export const SignUpScreen = ({ route, navigation }) => {
 
   const checkCode = () => {
     if (code != "") {
-      if (code != "Code") {йцу
+      if (code != "HeSFvGska0dSbHuT5QCRZpGAMkc2") {йцу
         inputs[0] = false;
         setCodeErrorMessage("Неправильный код");
         setCodeStyle(authStyle.errorContainer);

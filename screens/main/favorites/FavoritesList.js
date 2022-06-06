@@ -14,13 +14,17 @@ import {
   addDoc,
   orderBy,
   onSnapshot,
+  getDocs,
   query,
   where,
   doc,
   get,
   getDoc,
   Timestamp,
+  collectionGroup,
+  documentId,
 } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 export const FavoritesList = (props) => {
   const [userId, setUserId] = useState(auth?.currentUser?.uid);
@@ -30,7 +34,7 @@ export const FavoritesList = (props) => {
   const [tasks, setTasks] = useState(null);
   let notLoaded = true;
 
-  useEffect(() => {    
+  useEffect(() => {
     const docRef = doc(firestore, "users", userId);
     const unsubscribe = onSnapshot(docRef, async (doc) => {
       setTasksId(doc.data().followedTasks);
@@ -38,28 +42,25 @@ export const FavoritesList = (props) => {
 
     return unsubscribe;
   }, []);
-  return null
-}/*
+
+  //  if (tasksId == null) return null;
   useLayoutEffect(() => {
-    if (tasksId == null) return null;
-    alert(tasksId)
-    return
-    const collectionRef = collection(
-      firestore,
-      `/VolunteeringTasks/${props.route.params.key}/tasks`
-    );
-    let q = null;
-    if (location == "Уся Україна") {
-      q = query(collectionRef);
-    } else if (location.includes(", ")) {
-      q = query(collectionRef, where("location", "==", location));
-    } else {
-      q = query(collectionRef, where("region", "==", location));
-    }
-    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      const tasks = await Promise.all(
+    (async () => {
+      if (tasksId === null) return;
+      
+      if (tasksId.length <= 0){
+        setTasks([])
+        return
+      }
+      const q = query(
+        collectionGroup(firestore, "tasks"),
+        where(documentId(), "in", tasksId)
+      );
+      const querySnapshot = await getDocs(q);
+      const followedTasks = await Promise.all(
         querySnapshot.docs.map(async (document) => {
           const task = {
+            key: document.ref.path.split('/')[1],
             createdAt: document.data().createdAt,
             task_id: document.id,
             title: document.data().title,
@@ -68,7 +69,7 @@ export const FavoritesList = (props) => {
           return task;
         })
       );
-      tasks.sort((a, b) => {
+      followedTasks.sort((a, b) => {
         if (a.createdAt.toDate() < b.createdAt.toDate()) {
           return -1;
         }
@@ -77,15 +78,10 @@ export const FavoritesList = (props) => {
         }
         return 0;
       });
-      setTasks(tasks);
+      setTasks(followedTasks);
       notLoaded = false;
-    });
-
-    return unsubscribe;
+    })();
   }, [tasksId]);
-
-  return null;
-
 
   let notPressed = true;
 
@@ -119,12 +115,14 @@ export const FavoritesList = (props) => {
         setTimeout(() => {
           notPressed = true;
         }, 500);
+
         props.navigation.navigate("TaskStack", {
-          key: props.route.params.key,
-          title: props.route.params.title,
+          key: item.key,
+          title: 'Вибране',
           task_id: item.task_id,
           userId: userId,
         });
+
       }}
     >
       <View
@@ -175,4 +173,3 @@ export const FavoritesList = (props) => {
     </View>
   );
 };
-*/

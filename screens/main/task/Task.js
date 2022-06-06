@@ -26,24 +26,27 @@ export const Task = (props) => {
   const [isFollowed, setIsFollowed] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const taskRef = `VolunteeringTasks/${props.route.params.key}/tasks/${props.route.params.task_id}`
+
   const checkTask = async () => {
     const docRef = doc(firestore, "users", props.route.params.userId);
     const userData = await getDoc(docRef);
     const followedTasks = userData.data().followedTasks;
-    setIsFollowed(followedTasks.includes(props.route.params.task_id));
+    setIsFollowed(followedTasks.includes(taskRef));
   };
 
   useEffect(() => {
     const docRef = doc(firestore, "users", props.route.params.userId);
     const unsubscribe = onSnapshot(docRef, (doc) => {
       let tasksArray = doc.data().followedTasks;
-      console.log(tasksArray.includes(props.route.params.task_id));
-      setIsFollowed(tasksArray.includes(props.route.params.task_id));
+      //console.log(tasksArray.includes(taskRef));
+      setIsFollowed(tasksArray.includes(taskRef));
       setIsLoading(false);
     });
 
     return unsubscribe;
   }, []);
+
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -66,10 +69,9 @@ export const Task = (props) => {
               if (isLoading) return;
               setIsLoading(true);
               const docRef = doc(firestore, "users", props.route.params.userId);
-              console.log(isFollowed);
-              if (isFollowed) {
+              if (isFollowed) {                
                 await updateDoc(docRef, {
-                  followedTasks: arrayRemove(props.route.params.task_id),
+                  followedTasks: arrayRemove(taskRef),
                 });
                 ToastAndroid.showWithGravity(
                   "Вилучено з вибраного",
@@ -78,7 +80,7 @@ export const Task = (props) => {
                 );
               } else {
                 await updateDoc(docRef, {
-                  followedTasks: arrayUnion(props.route.params.task_id),
+                  followedTasks: arrayUnion(taskRef),
                 });
                 ToastAndroid.showWithGravity(
                   "Додано у вибране",
