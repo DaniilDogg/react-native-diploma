@@ -15,17 +15,24 @@ import { TaskStack } from "./screens/main/task/TaskStack";
 import { DrawerScreen } from "./screens/main/drawer/Drawer";
 
 import { LogBox } from 'react-native';
-import { auth } from "./firebase/firebase-config";
+import { auth, firestore } from "./firebase/firebase-config";
+
 import { onAuthStateChanged } from "firebase/auth";
+
+import {
+  collection,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [initializing, setInitializing] = useState(true)
   const [screen, setScreen] = useState('')
-
+  const [admin, setAdmin] = useState(null)
   LogBox.ignoreAllLogs()
-  //LogBox.ignoreLogs([`AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage`]);
+  
   const config = {
     animation: "spring",
     config: {
@@ -37,10 +44,14 @@ export default function App() {
       restSpeedThreshold: 0.1,
     },
   };
+  
   useEffect(()=>{
-    onAuthStateChanged(auth, (user)=>{
+    onAuthStateChanged(auth, async (user)=>{
       if (user) {
         if(user.displayName != null){
+          const docRef = doc(firestore, "users", user.uid);
+          const data = await getDoc(docRef);
+          setAdmin(data.data().admin)
           setScreen('DrawerScreen')
         }
         else{
@@ -97,6 +108,9 @@ export default function App() {
           <Stack.Screen
             name="DrawerScreen"
             component={DrawerScreen}
+            initialParams={{
+              isAdmin: admin,
+            }}
             options={{
               transitionSpec: {
                 open: {},

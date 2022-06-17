@@ -16,7 +16,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-export const VolunteeringList = (props) => {
+export const CreatedList = (props) => {
   const [tasks, setTasks] = useState(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const VolunteeringList = (props) => {
     return(
     <TouchableHighlight
       style={{
-        backgroundColor: "#FFE5CD",
+        backgroundColor: "#EBE0D4",
         borderRadius: 20,
         marginVertical: 10,
         marginHorizontal: 15,

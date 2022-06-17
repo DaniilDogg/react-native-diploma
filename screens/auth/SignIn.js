@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { auth } from "../../firebase/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, Button, Text } from "@rneui/base";
 import { authStyle } from "./style";
+
+import { auth, firestore } from "../../firebase/firebase-config";
+import {
+  collection,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export const SignInScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,19 +45,23 @@ export const SignInScreen = ({ navigation }) => {
     }
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email.toLowerCase(), password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         if (user.displayName === null) {
           navigation.navigate("CreateAccount");
         } else {
-          navigation.replace("DrawerScreen");
+          const docRef = doc(firestore, "users", user.uid);
+          const data = await getDoc(docRef);
+          navigation.replace("DrawerScreen", {isAdmin: data.data().admin});
         }
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setErrorMessage("Ця комбінація електронної пошти та пароля неправильна.");
+        setErrorMessage(
+          "Ця комбінація електронної пошти та пароля неправильна."
+          );
       })
       .finally(() => setIsLoading(false));
   };

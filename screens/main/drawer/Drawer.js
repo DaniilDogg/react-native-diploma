@@ -10,12 +10,12 @@ import { ChatScreen } from "../task/Chat";
 import { Volunteering } from "../volunteering/VolunteeringStack";
 import { LocationStack } from "../location/LocationStack";
 import { FavoritesList } from "../favorites/FavoritesList";
-
+import { CreateStack } from '../created/createStack'
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Drawer = createDrawerNavigator();
 
-export const DrawerScreen = () => {
+export const DrawerScreen = (props) => {
   return (
     <SafeAreaProvider>
       <Drawer.Navigator
@@ -62,6 +62,25 @@ export const DrawerScreen = () => {
             ),
           }}
         />
+        {props.route.params.isAdmin &&
+        (
+          <Drawer.Screen
+          name="Created"
+          component={CreateStack}
+          options={{
+            title: "Мої завдання",
+            drawerIcon: ({ color }) => (
+              <Icon
+              name='filter'
+              type='octicon'
+              color={color}
+              size={23}
+            />
+            ),
+          }}
+        />
+        )
+        }
         <Drawer.Screen
           name="Filter"
           component={LocationStack}
