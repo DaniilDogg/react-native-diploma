@@ -79,6 +79,7 @@ export const CreateAccountScreen = ({ navigation }) => {
       admin: false,      
       displayName: name,
       email: user.email,
+      createdTasks: [],
       followedTasks: [],
       location: 'Уся Україна',
       photoURL: photoUrl,

@@ -11,7 +11,8 @@ import { SignInScreen } from "./screens/auth/SignIn";
 import { SignUpScreen } from "./screens/auth/SignUp";
 import { CreateAccountScreen } from "./screens/auth/CreateAccount";
 import { TaskStack } from "./screens/main/task/TaskStack";
-
+import { CreateTask } from "./screens/main/created/CreateTask"
+import { TaskLocationList } from "./screens/main/created/TaskLocationList"
 import { DrawerScreen } from "./screens/main/drawer/Drawer";
 
 import { LogBox } from 'react-native';
@@ -121,6 +122,26 @@ export default function App() {
           <Stack.Screen
             name="TaskStack"
             component={TaskStack}
+            options={{
+              transitionSpec: {
+                open: {},
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="CreateTask"
+            component={CreateTask}
+            options={{
+              transitionSpec: {
+                open: {},
+                close: config,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="TaskLocationList"
+            component={TaskLocationList}
             options={{
               transitionSpec: {
                 open: {},

@@ -17,7 +17,7 @@ export const LocationStack = (props) => {
       <Stack.Screen
         name="LocationFilterScreen"
         component={LocationFilterScreen}
-        initialParams={{location: ''}}
+        initialParams={{location: '', purpose: 'user'}}
       />
       <Stack.Screen
         name="LocationList"

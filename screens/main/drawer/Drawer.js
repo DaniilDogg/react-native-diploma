@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Icon } from "@rneui/base";
+import { Icon, Button } from "@rneui/base";
 
 import { CustomDrawer } from "./CustomDrawer";
 
@@ -10,7 +10,7 @@ import { ChatScreen } from "../task/Chat";
 import { Volunteering } from "../volunteering/VolunteeringStack";
 import { LocationStack } from "../location/LocationStack";
 import { FavoritesList } from "../favorites/FavoritesList";
-import { CreateStack } from '../created/createStack'
+import { CreatedList } from '../created/CreatedTaskList'
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Drawer = createDrawerNavigator();
@@ -21,7 +21,7 @@ export const DrawerScreen = (props) => {
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawer {...props} />}
         useLegacyImplementation={true}
-        initialRouteName={"Volunteering"}
+        initialRouteName={ props.route.params.isAdmin == true ? 'CreatedList' : 'Volunteering'}
         screenOptions={{
           headerShown: true,
           swipeEnabled: false,
@@ -47,6 +47,25 @@ export const DrawerScreen = (props) => {
             ),
           }}
         />
+        {props.route.params.isAdmin &&
+        (
+          <Drawer.Screen
+          name="CreatedList"
+          component={CreatedList}
+          options={{
+            title: "Мої завдання",
+            drawerIcon: ({ color }) => (
+              <Icon
+              name='filter'
+              type='octicon'
+              color={color}
+              size={23}
+            />
+            ),
+          }}
+        />
+        )
+        }
         <Drawer.Screen
           name="Volunteering"
           component={Volunteering}
@@ -62,25 +81,6 @@ export const DrawerScreen = (props) => {
             ),
           }}
         />
-        {props.route.params.isAdmin &&
-        (
-          <Drawer.Screen
-          name="Created"
-          component={CreateStack}
-          options={{
-            title: "Мої завдання",
-            drawerIcon: ({ color }) => (
-              <Icon
-              name='filter'
-              type='octicon'
-              color={color}
-              size={23}
-            />
-            ),
-          }}
-        />
-        )
-        }
         <Drawer.Screen
           name="Filter"
           component={LocationStack}
