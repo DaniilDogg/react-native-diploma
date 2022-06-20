@@ -88,7 +88,7 @@ export const CreatedList = (props) => {
       const createdTasks = await Promise.all(
         querySnapshot.docs.map(async (document) => {
           const task = {
-            key: document.ref.path.split("/")[1],
+            category_key: document.ref.path.split("/")[1],
             createdAt: document.data().createdAt,
             task_id: document.id,
             title: document.data().title,
@@ -144,7 +144,7 @@ export const CreatedList = (props) => {
           /////////////////////////////////////
           props.navigation.navigate("TaskStack", {
             purpose: 'admin',
-            key: item.key,
+            key: item.category_key,
             title: "Мої завдання",
             task_id: item.task_id,
             userId: userId,

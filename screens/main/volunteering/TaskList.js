@@ -79,7 +79,6 @@ export const TaskList = (props) => {
       const tasks = await Promise.all(
         querySnapshot.docs.map(async (document) => {
           const task = {
-            key: document.ref.path.split("/")[1],
             createdAt: document.data().createdAt,
             task_id: document.id,
             title: document.data().title,
