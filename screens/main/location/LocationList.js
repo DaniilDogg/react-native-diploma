@@ -43,7 +43,7 @@ export const LocationList = (props) => {
             location: newLocation,
           });
           DeviceEventEmitter.emit("event.location", newLocation);
-          props.navigation.replace("LocationFilterScreen", {location: newLocation});
+          props.navigation.navigate("LocationFilterScreen", { location: newLocation });
         };
 
         if (item == "Уся Україна") {

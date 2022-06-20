@@ -56,8 +56,8 @@ export const DrawerScreen = (props) => {
             title: "Мої завдання",
             drawerIcon: ({ color }) => (
               <Icon
-              name='filter'
-              type='octicon'
+              name='my-library-books'
+              type='material'
               color={color}
               size={23}
             />

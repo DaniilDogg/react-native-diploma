@@ -49,7 +49,7 @@ export const TaskLocationList = (props) => {
           if(newLocation.includes(', Уся ')){
             newLocation = newLocation.split(', ')[1]
           }
-          props.navigation.replace("CreateTask", {location: newLocation});
+          props.navigation.replace("CreateTask", {location: newLocation, title: props?.route?.params?.title, description: props?.route?.params?.description, category: props?.route?.params?.category});
         };
 
         if (item == "Уся Україна") {
@@ -57,7 +57,7 @@ export const TaskLocationList = (props) => {
           return;
         }
         if (props?.route?.params?.region == "") {
-          props.navigation.navigate("TaskLocationList", { region: item });
+          props.navigation.replace("TaskLocationList", { region: item, title: props?.route?.params?.title, description: props?.route?.params?.description, category: props?.route?.params?.category });
         }
         else {
           let location = props.route.params.region;

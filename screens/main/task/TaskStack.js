@@ -39,6 +39,7 @@ export const TaskStack = (props) => {
           title: props.route.params.title,
         })}
         initialParams={{
+          purpose: props.route.params.purpose,
           title: props.route.params.title,
           key: props.route.params.key,
           task_id: props.route.params.task_id,

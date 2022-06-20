@@ -26,6 +26,8 @@ export const Task = (props) => {
   const [isFollowed, setIsFollowed] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isAdmin, setIsAdmin] = useState(props?.route?.params?.purpose)
+
   const taskRef = `VolunteeringTasks/${props.route.params.key}/tasks/${props.route.params.task_id}`
 
   const checkTask = async () => {
@@ -39,7 +41,9 @@ export const Task = (props) => {
     const docRef = doc(firestore, "users", props.route.params.userId);
     const unsubscribe = onSnapshot(docRef, (doc) => {
       let tasksArray = doc.data().followedTasks;
+      let createdTasks = doc.data().createdTasks;
       //console.log(tasksArray.includes(taskRef));
+      setIsAdmin(createdTasks.includes(taskRef))
       setIsFollowed(tasksArray.includes(taskRef));
       setIsLoading(false);
     });
@@ -47,57 +51,104 @@ export const Task = (props) => {
     return unsubscribe;
   }, []);
 
+  const UserButton = () => {
+    return (
+      <Button
+        loading={isLoading}
+        icon={
+          <Icon
+            name={
+              isFollowed ? "remove-circle-outline" : "add-circle-outline"
+            }
+            type="ionicon"
+            color="#000"
+            size={35}
+          />
+        }
+        onPress={async () => {
+          if (isLoading) return;
+          setIsLoading(true);
+          const docRef = doc(firestore, "users", props.route.params.userId);
+          const taskDocRef = doc(firestore, taskRef)
+          if (isFollowed) {                
+            await updateDoc(docRef, {
+              followedTasks: arrayRemove(taskRef),
+            });
+            await updateDoc(taskDocRef, {
+              followers: arrayRemove(props.route.params.userId),
+            });
+            
+            ToastAndroid.showWithGravity(
+              "Вилучено з вибраного",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+            );
+          } else {
+            await updateDoc(docRef, {
+              followedTasks: arrayUnion(taskRef),
+            });
+            await updateDoc(taskDocRef, {
+              followers: arrayUnion(props.route.params.userId),
+            });
+            ToastAndroid.showWithGravity(
+              "Додано у вибране",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+            );
+          }
+        }}
+        buttonStyle={{
+          backgroundColor: "#FFA046",
+          paddingLeft: 12,
+          paddingRight: 12,
+          height: "100%",
+          borderRadius: 0,
+        }}
+      />
+    );
+  }
+
+  const AdminButton = () => {
+    return (
+      <Button
+        icon={
+          <Icon
+            name={
+              'menu'
+            }
+            type="entypo"
+            color="#000"
+            size={30}
+          />
+        }
+        onPress={async () => {
+
+        }}
+        buttonStyle={{
+          backgroundColor: "#FFA046",
+          paddingLeft: 12,
+          paddingRight: 12,
+          height: "100%",
+          borderRadius: 0,
+        }}
+      />
+    );
+  }
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: () => {
         if (isFollowed == null) return;
-        return (
-          <Button
-            loading={isLoading}
-            icon={
-              <Icon
-                name={
-                  isFollowed ? "remove-circle-outline" : "add-circle-outline"
-                }
-                type="ionicon"
-                color="#000"
-                size={35}
-              />
-            }
-            onPress={async () => {
-              if (isLoading) return;
-              setIsLoading(true);
-              const docRef = doc(firestore, "users", props.route.params.userId);
-              if (isFollowed) {                
-                await updateDoc(docRef, {
-                  followedTasks: arrayRemove(taskRef),
-                });
-                ToastAndroid.showWithGravity(
-                  "Вилучено з вибраного",
-                  ToastAndroid.SHORT,
-                  ToastAndroid.CENTER
-                );
-              } else {
-                await updateDoc(docRef, {
-                  followedTasks: arrayUnion(taskRef),
-                });
-                ToastAndroid.showWithGravity(
-                  "Додано у вибране",
-                  ToastAndroid.SHORT,
-                  ToastAndroid.CENTER
-                );
-              }
-            }}
-            buttonStyle={{
-              backgroundColor: "#FFA046",
-              paddingLeft: 12,
-              paddingRight: 12,
-              height: "100%",
-              borderRadius: 0,
-            }}
-          />
-        );
+        if(isAdmin){
+          return(
+            <AdminButton/>
+          )
+        }
+        else{
+          return(
+            <UserButton/>
+          )
+        }
       },
     });
   }, [props.navigation, isFollowed, isLoading]);
@@ -128,8 +179,6 @@ export const Task = (props) => {
         </View>
         <Text style={[style.description, {}]}>
           {description}
-          {"\n"}
-          {description}
         </Text>
       </ScrollView>
       <Button
@@ -157,7 +206,7 @@ const style = StyleSheet.create({
     color: "#000",
     marginHorizontal: 15,
     marginTop: 15,
-    alignSelf: "center",
+    alignSelf: "flex-start",
     lineHeight: 33,
   },
   divider_container: {
@@ -173,7 +222,7 @@ const style = StyleSheet.create({
     color: "#000",
     marginHorizontal: 12,
     marginVertical: 15,
-    alignSelf: "center",
+    alignSelf: "flex-start",
     lineHeight: 28,
   },
   button: {
